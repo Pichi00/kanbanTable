@@ -1,7 +1,7 @@
 package user
 
 import (
-	. "main/internal/model/table"
+	"main/internal/model/table"
 )
 
 type User struct {
@@ -9,5 +9,5 @@ type User struct {
 	name     string
 	email    string
 	password string
-	tables   []Table
+	tables   []table.Table
 }
