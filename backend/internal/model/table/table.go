@@ -3,6 +3,6 @@ package table
 type Table struct {
 	ID            int
 	name          string
-	TaskGroup     []TaskGroup
+	taskGroup     []TaskGroup
 	avaliableTags []Tag
 }
