@@ -1,12 +1,17 @@
+import { makeTheme, DripsyProvider, H1 } from "dripsy";
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
 
+const theme = makeTheme({});
+
 const App = () => {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <DripsyProvider theme={theme}>
+      <View style={styles.container}>
+        <H1>Open up App.js to start working on your app!</H1>
+        <StatusBar style="auto" />
+      </View>
+    </DripsyProvider>
   );
 };
 
