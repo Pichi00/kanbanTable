@@ -1,5 +1,6 @@
 {
   "expo": {
+    "entry": "./src/App.tsx",
     "name": "dzbanban",
     "slug": "dzbanban",
     "version": "1.0.0",

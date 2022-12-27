@@ -1,4 +1,5 @@
 import { makeTheme, DripsyProvider, H1 } from "dripsy";
+import { registerRootComponent } from "expo";
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
 
@@ -8,14 +9,12 @@ const App = () => {
   return (
     <DripsyProvider theme={theme}>
       <View style={styles.container}>
-        <H1>Open up App.js to start working on your app!</H1>
+        <Text>Dzbanban</Text>
         <StatusBar style="auto" />
       </View>
     </DripsyProvider>
   );
 };
-
-export default App;
 
 const styles = StyleSheet.create({
   container: {
@@ -25,3 +24,5 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 });
+
+registerRootComponent(App);
