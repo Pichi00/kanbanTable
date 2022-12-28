@@ -8,9 +8,8 @@ import lombok.Data;
 
 @Entity
 @Data
-public class Table {
-    @Id
-    @GeneratedValue
+public class Task {
+    @Id @GeneratedValue
     private Long id;
     @Column
     private String name;

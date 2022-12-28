@@ -8,10 +8,13 @@ import lombok.Data;
 
 @Entity
 @Data
-public class Table {
-    @Id
-    @GeneratedValue
+public class User {
+    @Id @GeneratedValue
     private Long id;
     @Column
-    private String name;
+    private String email;
+    @Column
+    private String username;
+    @Column
+    private String password;
 }
