@@ -19,6 +19,6 @@ public class Table {
     @ManyToOne
     @JoinColumn(name = "ID")
     private User user;
-    @OneToMany(mappedBy = "TABLE_TABLE")
+    @OneToMany(mappedBy = "T_TABLE")
     private List<TaskGroup> taskGroups;
 }

@@ -16,6 +16,6 @@ public class Tag {
     private String name;
 
     // Relations
-    @ManyToMany(mappedBy = "TASK_TABLE")
+    @ManyToMany(mappedBy = "T_TASK")
     private List<Task> tasks;
 }
