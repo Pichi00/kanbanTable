@@ -6,8 +6,8 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-@Entity(name = "T_TABLE")
-public class Table {
+@Entity(name = "T_TASKGROUP")
+public class TaskGroup {
     @Id
     @GeneratedValue
     @Column(name = "ID")
@@ -18,7 +18,7 @@ public class Table {
     // Relations
     @ManyToOne
     @JoinColumn(name = "ID")
-    private User user;
-    @OneToMany(mappedBy = "T_TABLE")
-    private List<TaskGroup> taskGroups;
+    private Table table;
+    @OneToMany(mappedBy = "T_TASKGROUP")
+    private List<Task> tasks;
 }
