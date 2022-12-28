@@ -6,15 +6,7 @@ import { theme, ThemeProvider } from "./theme";
 
 const App = () => {
   return (
-    <ThemeProvider
-      theme={theme}
-      darkTheme={{
-        colors: {
-          background: "black",
-        },
-      }}
-      mode="light"
-    >
+    <ThemeProvider theme={theme} darkTheme={undefined} mode="light">
       <LandingScreen />
       <StatusBar style="auto" />
     </ThemeProvider>

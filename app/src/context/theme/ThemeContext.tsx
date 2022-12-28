@@ -4,6 +4,15 @@ export type Theme = {
   colors?: {
     [key: string]: string;
   };
+  spacing?: {
+    [key: string]: number;
+  };
+  radii?: {
+    [key: string]: number;
+  };
+  fontSizes?: {
+    [key: string]: number;
+  };
 };
 
 export type ThemeContextType<AppTheme extends Theme = {}> = {
