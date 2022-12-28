@@ -1,20 +1,25 @@
 package com.kanban.backend.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 
-@Entity
+import java.util.List;
+
 @Data
+@Entity(name = "USER_TABLE")
 public class User {
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue
+    @Column(name = "ID")
     private Long id;
-    @Column
+    @Column(name = "EMAIL")
     private String email;
-    @Column
+    @Column(name = "USERNAME")
     private String username;
-    @Column
+    @Column(name = "PASSWORD")
     private String password;
+
+    // Relations
+    @OneToMany(mappedBy = "USER_TABLE")
+    private List<Table> tables;
 }

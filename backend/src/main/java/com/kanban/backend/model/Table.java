@@ -1,17 +1,24 @@
 package com.kanban.backend.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 
-@Entity
+import java.util.List;
+
 @Data
+@Entity(name = "TABLE_TABLE")
 public class Table {
     @Id
     @GeneratedValue
+    @Column(name = "ID")
     private Long id;
-    @Column
+    @Column(name = "NAME")
     private String name;
+
+    // Relations
+    @ManyToOne
+    @JoinColumn(name = "ID")
+    private User user;
+    @OneToMany(mappedBy = "TABLE_TABLE")
+    private List<TaskGroup> taskGroups;
 }

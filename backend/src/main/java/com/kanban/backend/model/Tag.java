@@ -1,15 +1,21 @@
 package com.kanban.backend.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 
-@Entity
+import java.util.List;
+
 @Data
+@Entity(name = "TAG_TABLE")
 public class Tag {
     @Id
+    @GeneratedValue
+    @Column(name = "ID")
     private Long id;
-    @Column
+    @Column(name = "NAME")
     private String name;
+
+    // Relations
+    @ManyToMany(mappedBy = "TASK_TABLE")
+    private List<Task> tasks;
 }
