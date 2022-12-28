@@ -6,7 +6,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-@Entity(name = "TABLE_TABLE")
+@Entity(name = "T_TABLE")
 public class Table {
     @Id
     @GeneratedValue

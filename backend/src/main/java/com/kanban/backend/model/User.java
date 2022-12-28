@@ -6,7 +6,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-@Entity(name = "USER_TABLE")
+@Entity(name = "T_USER")
 public class User {
     @Id
     @GeneratedValue
@@ -20,6 +20,6 @@ public class User {
     private String password;
 
     // Relations
-    @OneToMany(mappedBy = "USER_TABLE")
+    @OneToMany(mappedBy = "T_USER")
     private List<Table> tables;
 }

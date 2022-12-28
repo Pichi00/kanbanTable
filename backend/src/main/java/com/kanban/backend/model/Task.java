@@ -6,7 +6,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-@Entity(name = "TASK_TABLE")
+@Entity(name = "T_TASK")
 public class Task {
     @Id
     @GeneratedValue
@@ -21,7 +21,7 @@ public class Task {
     private TaskGroup taskGroup;
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
-            name = "TAG_TABLE",
+            name = "T_TAG",
             joinColumns = @JoinColumn(
                   name = "ID",
                   referencedColumnName = "ID"
