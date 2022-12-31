@@ -1,4 +1,10 @@
-import { Platform, SafeAreaView, ScrollView, ViewStyle } from "react-native";
+import {
+  Platform,
+  SafeAreaView,
+  ScrollView,
+  ViewStyle,
+  View,
+} from "react-native";
 import { useTheme } from "../../theme";
 
 type Props = {
@@ -22,7 +28,23 @@ export const ScreenContainer = ({ children, style = {} }: Props) => {
         style,
       ]}
     >
-      {children}
+      {Platform.OS === "android" ? (
+        children
+      ) : (
+        <View
+          style={[
+            {
+              flex: 1,
+              alignSelf: "stretch",
+              paddingHorizontal: theme.spacing.$5,
+              paddingBottom: theme.spacing.$5,
+            },
+            style,
+          ]}
+        >
+          {children}
+        </View>
+      )}
     </SafeAreaView>
   );
 };

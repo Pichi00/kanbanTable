@@ -1,12 +1,29 @@
-import { Image, Text, useWindowDimensions, View } from "react-native";
+import { NativeStackScreenProps } from "@react-navigation/native-stack/lib/typescript/src/types";
+import { Canvas, Blur, BackdropBlur, Fill } from "@shopify/react-native-skia";
+import {
+  Image,
+  StyleSheet,
+  Text,
+  useWindowDimensions,
+  View,
+} from "react-native";
 import { Button } from "../../../components/Button";
 import { ScreenContainer } from "../../../components/ScreenContainer";
+import {
+  RootStackParamList,
+  RootStackRoutes,
+} from "../../../navigation/RootStack";
 import { useTheme } from "../../../theme";
 
 const HERO_IMAGE = require("../../../../assets/images/hero.png");
 
-export const LandingScreen = () => {
-  const { width } = useWindowDimensions();
+type Props = NativeStackScreenProps<
+  RootStackParamList,
+  typeof RootStackRoutes["Landing"]
+>;
+
+export const LandingScreen = ({ navigation, route }: Props) => {
+  const { width, height } = useWindowDimensions();
   const { theme } = useTheme();
 
   return (
@@ -48,6 +65,7 @@ export const LandingScreen = () => {
         style={{
           textAlign: "center",
           marginVertical: theme.spacing.$4,
+          color: theme.colors.text,
         }}
       >
         Quisque eu sem non lacus varius porttitor. Aenean nec ultricies lectus,
