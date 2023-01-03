@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 @Data
-@Entity
+@Entity(name = "T_TABLE")
 public class Table {
     @Id
     @GeneratedValue

@@ -5,7 +5,7 @@ import lombok.Data;
 
 
 @Data
-@Entity
+@Entity(name = "T_TASKGROUP")
 public class TaskGroup {
     @Id
     @GeneratedValue
