@@ -7,17 +7,15 @@ import MDIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { IconButton } from "../../../components/IconButton";
 import { useState } from "react";
 
-
 type Props = NativeStackScreenProps<
   RootStackParamList,
-  typeof RootStackRoutes["Register"]
+  typeof RootStackRoutes["SignIn"]
 >;
 
-export const RegisterScreen = ({ navigation, route }: Props) => {
+export const SignInScreen = ({ navigation, route }: Props) => {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const { theme } = useTheme();
 
-  
   return (
     <ScreenContainer
       style={{
@@ -39,7 +37,7 @@ export const RegisterScreen = ({ navigation, route }: Props) => {
             marginBottom: theme.spacing.$7,
           }}
         >
-          Join Dzbanban
+          Login to Dzbanban
         </Text>
         <Input
           placeholder="Email Address"
@@ -48,12 +46,7 @@ export const RegisterScreen = ({ navigation, route }: Props) => {
           autoCapitalize="none"
           prefix={{ icon: "email" }}
         />
-        <Spacer spacing={theme.spacing.$4} />
-        <Input
-          placeholder="Name"
-          autoComplete="name"
-          prefix={{ icon: "account" }}
-        />
+        
         <Spacer spacing={theme.spacing.$4} />
         <Input
           placeholder="Password"
@@ -67,7 +60,7 @@ export const RegisterScreen = ({ navigation, route }: Props) => {
         />
         <Spacer spacing={theme.spacing.$4} />
         <IconButton onPress={() => {}} icon="account-plus">
-          create an account
+          Log In
         </IconButton>
         <Text
           style={{
@@ -76,16 +69,16 @@ export const RegisterScreen = ({ navigation, route }: Props) => {
             marginTop: theme.spacing.$4,
           }}
         >
-          Already have an account?{" "}
+          Not a member yet?{" "}
           <Text
-            onPress={() => navigation.navigate(RootStackRoutes.SignIn)}
+            onPress={() => navigation.navigate(RootStackRoutes.Register)}
             style={{
               color: theme.colors.text,
               fontWeight: "bold",
               textDecorationLine: "underline",
             }}
           >
-            Sign In
+            Register
           </Text>
         </Text>
       </View>

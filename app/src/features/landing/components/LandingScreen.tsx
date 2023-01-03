@@ -91,7 +91,7 @@ export const LandingScreen = ({ navigation, route }: Props) => {
       >
         Already have an account?{" "}
         <Text
-          onPress={() => {}}
+          onPress={() => navigation.navigate(RootStackRoutes.SignIn)}
           style={{
             color: theme.colors.text,
             fontWeight: "bold",
