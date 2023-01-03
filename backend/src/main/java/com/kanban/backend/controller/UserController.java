@@ -10,26 +10,26 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 public class UserController {
-    private UserService userService;
+    private final UserService userService;
 
     // Endpoints
     @GetMapping("/users")
     public List<User> getAllUsers() {
-        return userService.getAllUsers();
+        return this.userService.getAllUsers();
     }
 
-    @GetMapping("/users/{username}")
-    public User getUserByUsername(@PathVariable String username) {
-        return userService.getUserByUsername(username);
+    @GetMapping("/users/{id}")
+    public User getUserById(@PathVariable Long id) {
+        return this.userService.getUserById(id);
     }
 
     @PostMapping("/users")
     public void addUser(User user) {
-        userService.addUser(user);
+        this.userService.addUser(user);
     }
 
     @DeleteMapping("/users/{id}")
     public void deleteUserById(@PathVariable Long id) {
-        userService.deleteUserById(id);
+        this.userService.deleteUserById(id);
     }
 }

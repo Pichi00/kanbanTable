@@ -16,8 +16,9 @@ public class UserService {
         return null;
     }
 
-    public User getUserByUsername(String username) {
+    public User getUserById(Long id) {
         // TODO
+
         return null;
     }
 
