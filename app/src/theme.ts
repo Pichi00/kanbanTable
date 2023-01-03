@@ -6,6 +6,7 @@ export const theme = {
     background: "#F5EBE0",
     surface: "#E3D5CA",
     surfaceDark: "#D5BDAF",
+    surfaceLight: "#FFFFFF",
 
     text: "#1E1510",
   },
@@ -16,6 +17,9 @@ export const theme = {
     $4: 16,
     $5: 24,
     $6: 32,
+    $7: 40,
+
+    $inputContainer: 64,
   },
   radii: {
     $1: 2,
@@ -28,9 +32,12 @@ export const theme = {
     display: 48,
     title: 32,
     body: 16,
+    button: 16,
   },
 } satisfies Theme;
 
+type AppTheme = typeof theme;
+
 const { ThemeContext, ThemeProvider, useTheme } = createTheme<typeof theme>();
 
-export { ThemeContext, ThemeProvider, useTheme };
+export { ThemeContext, ThemeProvider, useTheme, AppTheme };

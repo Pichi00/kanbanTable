@@ -1,5 +1,5 @@
-import { NativeStackScreenProps } from "@react-navigation/native-stack/lib/typescript/src/types";
-import { Canvas, Blur, BackdropBlur, Fill } from "@shopify/react-native-skia";
+import { useCallback, useState } from "react";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import {
   Image,
   StyleSheet,
@@ -9,11 +9,10 @@ import {
 } from "react-native";
 import { Button } from "../../../components/Button";
 import { ScreenContainer } from "../../../components/ScreenContainer";
-import {
-  RootStackParamList,
-  RootStackRoutes,
-} from "../../../navigation/RootStack";
 import { useTheme } from "../../../theme";
+import { RegisterSheet } from "./RegisterSheet";
+import { RootStackParamList, RootStackRoutes } from "../../../navigation/types";
+import { BottomSheet } from "../../../components";
 
 const HERO_IMAGE = require("../../../../assets/images/hero.png");
 
@@ -23,6 +22,7 @@ type Props = NativeStackScreenProps<
 >;
 
 export const LandingScreen = ({ navigation, route }: Props) => {
+  const [sheetVisible, setSheetVisible] = useState(false);
   const { width, height } = useWindowDimensions();
   const { theme } = useTheme();
 
@@ -71,11 +71,11 @@ export const LandingScreen = ({ navigation, route }: Props) => {
         Quisque eu sem non lacus varius porttitor. Aenean nec ultricies lectus,
         in dapibus turpis.
       </Text>
-      <Button>
+      <Button onPress={() => navigation.navigate(RootStackRoutes.Register)}>
         <Text
           style={{
             color: theme.colors.text,
-            fontSize: 16,
+            fontSize: theme.fontSizes.button,
             fontWeight: "bold",
           }}
         >
@@ -101,6 +101,7 @@ export const LandingScreen = ({ navigation, route }: Props) => {
           Sign In
         </Text>
       </Text>
+      {/* <BottomSheet></BottomSheet> */}
     </ScreenContainer>
   );
 };
