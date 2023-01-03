@@ -1,6 +1,7 @@
 package com.kanban.backend.service;
 
 import com.kanban.backend.model.User;
+import com.kanban.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -9,7 +10,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class UserService {
-    // DATABASE HERE
+    private final UserRepository userRepository;
 
     public List<User> getAllUsers() {
         // TODO

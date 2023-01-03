@@ -1,25 +1,25 @@
 package com.kanban.backend.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Data
 @Entity(name = "T_USER")
+@AllArgsConstructor
+@NoArgsConstructor
 public class User {
     @Id
     @GeneratedValue
-    @Column(name = "ID")
     private Long id;
-    @Column(name = "NAME")
     private String name;
-    @Column(name = "EMAIL")
     private String email;
-    @Column(name = "PASSWORD")
     private String password;
 
     // Relations
-    @OneToMany(mappedBy = "T_USER")
+    @OneToMany(mappedBy = "owner")
     private List<Table> tables;
 }

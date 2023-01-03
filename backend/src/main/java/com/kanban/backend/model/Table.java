@@ -1,24 +1,26 @@
 package com.kanban.backend.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Data
 @Entity(name = "T_TABLE")
+@AllArgsConstructor
+@NoArgsConstructor
 public class Table {
     @Id
     @GeneratedValue
-    @Column(name = "ID")
     private Long id;
-    @Column(name = "NAME")
     private String name;
 
     // Relations
     @ManyToOne
-    @JoinColumn(name = "ID")
-    private User user;
-    @OneToMany(mappedBy = "T_TABLE")
+    @JoinColumn(name = "owner_id")
+    private User owner;
+    @OneToMany(mappedBy = "table")
     private List<TaskGroup> taskGroups;
 }

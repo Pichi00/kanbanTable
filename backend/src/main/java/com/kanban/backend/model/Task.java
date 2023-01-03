@@ -1,35 +1,37 @@
 package com.kanban.backend.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Data
 @Entity(name = "T_TASK")
+@AllArgsConstructor
+@NoArgsConstructor
 public class Task {
     @Id
     @GeneratedValue
-    @Column(name = "ID")
     private Long id;
-    @Column(name = "NAME")
     private String name;
 
     // Relations
     @ManyToOne
-    @JoinColumn(name = "ID")
+    @JoinColumn(name = "taskgroup_id")
     private TaskGroup taskGroup;
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
-            name = "T_TAG",
+            name = "task_tag",
             joinColumns = @JoinColumn(
-                  name = "ID",
-                  referencedColumnName = "ID"
+                    name = "tag_id",
+                    referencedColumnName = "id"
             ),
             inverseJoinColumns = @JoinColumn(
-                    name = "ID",
-                    referencedColumnName = "ID"
+                    name = "task_id",
+                    referencedColumnName = "id"
             )
-    )
+        )
     private List<Tag> tags;
 }
