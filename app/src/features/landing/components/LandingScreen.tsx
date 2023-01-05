@@ -11,7 +11,11 @@ import { Button } from "../../../components/Button";
 import { ScreenContainer } from "../../../components/ScreenContainer";
 import { useTheme } from "../../../theme";
 import { RegisterSheet } from "./RegisterSheet";
-import { RootStackParamList, RootStackRoutes } from "../../../navigation/types";
+import {
+  AppRoutes,
+  RootStackParamList,
+  RootStackRoutes,
+} from "../../../navigation/types";
 import { BottomSheet } from "../../../components";
 
 const HERO_IMAGE = require("../../../../assets/images/hero.png");
@@ -101,7 +105,20 @@ export const LandingScreen = ({ navigation, route }: Props) => {
           Sign In
         </Text>
       </Text>
-      {/* <BottomSheet></BottomSheet> */}
+      <Text
+        onPress={() => {
+          navigation.navigate(RootStackRoutes.App, {
+            screen: AppRoutes.Table,
+          });
+        }}
+        style={{
+          color: theme.colors.surface,
+          fontSize: theme.fontSizes.body,
+          marginTop: theme.spacing.$4,
+        }}
+      >
+        Table screen
+      </Text>
     </ScreenContainer>
   );
 };

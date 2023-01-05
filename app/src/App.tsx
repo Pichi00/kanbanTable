@@ -7,15 +7,18 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { LandingScreen } from "./features/landing";
 import { RootStackNavigator } from "./navigation/RootStack";
 import { theme, ThemeProvider } from "./theme";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 const App = () => {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <ThemeProvider theme={theme} darkTheme={undefined} mode="light">
         <PortalProvider>
-          <NavigationContainer>
-            <RootStackNavigator />
-          </NavigationContainer>
+          <SafeAreaProvider>
+            <NavigationContainer>
+              <RootStackNavigator />
+            </NavigationContainer>
+          </SafeAreaProvider>
         </PortalProvider>
         <StatusBar style="auto" />
       </ThemeProvider>

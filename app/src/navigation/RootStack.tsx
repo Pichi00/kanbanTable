@@ -2,7 +2,9 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { RegisterScreen } from "../features/auth/components/RegisterScreen";
 import { SignInScreen } from "../features/auth/components/SignInScreen";
 import { LandingScreen } from "../features/landing";
+import { TableScreen } from "../features/table";
 import { useTheme } from "../theme";
+import { AppDrawerNavigator } from "./AppDrawer";
 import { RootStackParamList, RootStackRoutes } from "./types";
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
@@ -21,6 +23,7 @@ export const RootStackNavigator = () => {
         },
         headerBackTitleVisible: false,
         headerTintColor: theme.colors.text,
+        headerShadowVisible: false,
         // headerShown: false,
       }}
       initialRouteName={RootStackRoutes.Landing}
@@ -47,6 +50,13 @@ export const RootStackNavigator = () => {
         options={{
           title: "Sign In",
           presentation: "modal",
+        }}
+      />
+      <RootStack.Screen
+        name={RootStackRoutes.App}
+        component={AppDrawerNavigator}
+        options={{
+          headerShown: false,
         }}
       />
     </RootStack.Navigator>
