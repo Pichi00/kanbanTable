@@ -25,6 +25,7 @@ export const Input = ({
   prefix,
   placeholder,
   suffix,
+  onChangeText,
   ...props
 }: Props) => {
   const { theme } = useTheme();
@@ -39,8 +40,9 @@ export const Input = ({
   const handleChange = useCallback(
     (text: string) => {
       setValue(text);
+      onChangeText?.(text);
     },
-    [setValue],
+    [setValue, onChangeText],
   );
 
   const rPlaceholderStyles = useAnimatedStyle(() => {
@@ -68,6 +70,8 @@ export const Input = ({
             backgroundColor: theme.colors.surfaceLight,
             borderRadius: theme.radii.$3,
             overflow: "hidden",
+            borderWidth: 2,
+            borderColor: theme.colors.surfaceDark,
           },
         ]}
       >
@@ -102,7 +106,7 @@ export const Input = ({
               {
                 alignSelf: "stretch",
                 fontSize: theme.fontSizes.body,
-                color: theme.colors.surfaceDark,
+                color: theme.colors.text,
               },
               style,
             ]}
@@ -115,6 +119,7 @@ export const Input = ({
                 position: "absolute",
                 left: 0,
                 color: theme.colors.surfaceDark,
+                fontWeight: "500",
               },
               rPlaceholderStyles,
             ]}
