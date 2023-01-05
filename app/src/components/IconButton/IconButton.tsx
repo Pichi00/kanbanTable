@@ -18,7 +18,6 @@ export const IconButton = ({ children, icon, onPress }: Props) => {
         flexDirection: "row",
         justifyContent: "center",
         paddingHorizontal: theme.spacing.$5,
-        paddingVertical: theme.spacing.$4,
       }}
     >
       <Text

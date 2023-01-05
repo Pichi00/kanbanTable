@@ -25,8 +25,10 @@ export const Button = ({ children, onPress, style }: ButtonProps) => {
             backgroundColor: theme.colors.surfaceDark,
             justifyContent: "center",
             alignItems: "center",
-            paddingVertical: theme.spacing.$5,
+            paddingVertical: theme.spacing.$4,
             borderRadius: theme.radii.$3,
+            borderWidth: 2,
+            borderColor: theme.colors.text,
           },
           style,
         ]}

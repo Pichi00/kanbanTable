@@ -46,7 +46,7 @@ export const SignInScreen = ({ navigation, route }: Props) => {
           autoCapitalize="none"
           prefix={{ icon: "email" }}
         />
-        
+
         <Spacer spacing={theme.spacing.$4} />
         <Input
           placeholder="Password"
@@ -60,7 +60,7 @@ export const SignInScreen = ({ navigation, route }: Props) => {
         />
         <Spacer spacing={theme.spacing.$4} />
         <IconButton onPress={() => {}} icon="account-plus">
-          Log In
+          log in
         </IconButton>
         <Text
           style={{
