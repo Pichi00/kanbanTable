@@ -1,5 +1,6 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { RegisterScreen } from "../features/auth/components/RegisterScreen";
+import { SignInScreen } from "../features/auth/components/SignInScreen";
 import { LandingScreen } from "../features/landing";
 import { useTheme } from "../theme";
 import { RootStackParamList, RootStackRoutes } from "./types";
@@ -37,6 +38,14 @@ export const RootStackNavigator = () => {
         component={RegisterScreen}
         options={{
           title: "Register",
+          presentation: "modal",
+        }}
+      />
+      <RootStack.Screen
+        name={RootStackRoutes.SignIn}
+        component={SignInScreen}
+        options={{
+          title: "Sign In",
           presentation: "modal",
         }}
       />
