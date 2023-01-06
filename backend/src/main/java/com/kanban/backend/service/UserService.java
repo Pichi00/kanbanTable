@@ -13,21 +13,18 @@ public class UserService {
     private final UserRepository userRepository;
 
     public List<User> getAllUsers() {
-        // TODO
-        return null;
+        return userRepository.findAll();
     }
 
     public User getUserById(Long id) {
-        // TODO
-
-        return null;
+        return userRepository.findById(id).orElse(null);
     }
 
-    public void addUser(User user) {
-        // TODO
+    public User addUser(User user) {
+        return userRepository.save(user);
     }
 
     public void deleteUserById(Long id) {
-        // TODO
+        userRepository.deleteById(id);
     }
 }

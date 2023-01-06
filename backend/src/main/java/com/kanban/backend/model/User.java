@@ -22,4 +22,8 @@ public class User {
     // Relations
     @OneToMany(mappedBy = "owner")
     private List<Table> tables;
+
+    public void addTable(Table table) {
+        tables.add(table);
+    }
 }
