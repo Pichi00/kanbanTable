@@ -3,7 +3,9 @@ package com.kanban.backend.controller;
 import com.kanban.backend.dto.UserCreatorDTO;
 import com.kanban.backend.dto.UserDTO;
 import com.kanban.backend.mapper.Mapper;
+import com.kanban.backend.model.Table;
 import com.kanban.backend.model.User;
+import com.kanban.backend.service.TableService;
 import com.kanban.backend.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +17,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
+    private final TableService tableService;
     private final Mapper mapper;
 
     @GetMapping("/users")
@@ -37,12 +40,11 @@ public class UserController {
     public void addUser(@RequestBody UserCreatorDTO userCreatorDTO) {
         User user = mapper.toUser(userCreatorDTO);
 
-        // TODO
-        /*userCreatorDTO
+        userCreatorDTO
                 .getTables()
                 .stream()
-                .map(table -> tableService.getOrCreateTable(table))
-                .forEach(user::addTable);*/
+                .map(tableService::getTableById)
+                .forEach(user::addTable);
 
         userService.addUser(user);
     }
