@@ -20,8 +20,8 @@ public class UserService {
         return userRepository.findById(id).orElse(null);
     }
 
-    public void addUser(User user) {
-        userRepository.save(user);
+    public User addUser(User user) {
+        return userRepository.save(user);
     }
 
     public void deleteUserById(Long id) {

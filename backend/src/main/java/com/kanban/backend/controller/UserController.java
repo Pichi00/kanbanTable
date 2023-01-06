@@ -37,16 +37,18 @@ public class UserController {
     }
 
     @PostMapping("/users")
-    public void addUser(@RequestBody UserCreatorDTO userCreatorDTO) {
+    public User addUser(@RequestBody UserCreatorDTO userCreatorDTO) {
         User user = mapper.toUser(userCreatorDTO);
+        if(userCreatorDTO.getTables() != null){
+            userCreatorDTO
+                    .getTables()
+                    .stream()
+                    .map(tableService::getTableById)
+                    .forEach(user::addTable);
+        }
 
-        userCreatorDTO
-                .getTables()
-                .stream()
-                .map(tableService::getTableById)
-                .forEach(user::addTable);
 
-        userService.addUser(user);
+        return userService.addUser(user);
     }
 
     @DeleteMapping("/users/{id}")

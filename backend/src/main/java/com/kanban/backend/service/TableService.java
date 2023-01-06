@@ -20,9 +20,7 @@ public class TableService {
         return tableRepository.findById(id).orElse(null);
     }
 
-    public void addTable(Table table) {
-        tableRepository.save(table);
-    }
+    public Table addTable(Table table) {return tableRepository.save(table); }
 
     public void deleteTableById(Long id) {
         tableRepository.deleteById(id);

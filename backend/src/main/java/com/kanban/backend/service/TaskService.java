@@ -20,8 +20,8 @@ public class TaskService {
         return taskRepository.findById(id).orElse(null);
     }
 
-    public void addTask(Task task) {
-        taskRepository.save(task);
+    public Task addTask(Task task) {
+        return taskRepository.save(task);
     }
 
     public void deleteTaskById(Long id) {

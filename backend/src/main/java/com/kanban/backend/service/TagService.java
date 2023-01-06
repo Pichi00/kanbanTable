@@ -20,9 +20,7 @@ public class TagService {
         return tagRepository.findById(id).orElse(null);
     }
 
-    public void addTag(Tag tag) {
-        tagRepository.save(tag);
-    }
+    public Tag addTag(Tag tag) {return tagRepository.save(tag); }
 
     public void deleteTagById(Long id) {
         tagRepository.deleteById(id);

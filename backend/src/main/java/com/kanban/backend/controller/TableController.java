@@ -23,8 +23,8 @@ public class TableController {
     }
 
     @PostMapping("/tables")
-    public void addTable(@RequestBody Table table) {
-        tableService.addTable(table);
+    public Table addTable(@RequestBody Table table) {
+        return tableService.addTable(table);
     }
 
     @DeleteMapping("/tables/{id}")

@@ -23,8 +23,7 @@ public class TagController {
     }
 
     @PostMapping("/tags")
-    public void addTag(@RequestBody Tag tag) {
-        tagService.addTag(tag);
+    public Tag addTag(@RequestBody Tag tag) { return tagService.addTag(tag);
     }
 
     @DeleteMapping("/tags/{id}")

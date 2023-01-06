@@ -17,17 +17,17 @@ public class TaskGroupController {
         return taskGroupService.getAllTaskGroups();
     }
 
-    @GetMapping("/tasksgroup/{id}")
+    @GetMapping("/taskgroups/{id}")
     public TaskGroup getTaskGroupById(@PathVariable Long id) {
         return taskGroupService.getTaskGroupById(id);
     }
 
-    @PostMapping("/tasksgroup")
-    public void addTaskGroup(@RequestBody TaskGroup taskGroup) {
-        taskGroupService.addTaskGroup(taskGroup);
+    @PostMapping("/taskgroups")
+    public TaskGroup addTaskGroup(@RequestBody TaskGroup taskGroup) {
+        return taskGroupService.addTaskGroup(taskGroup);
     }
 
-    @DeleteMapping("/tasksgroup/{id}")
+    @DeleteMapping("/taskgroups/{id}")
     public void deleteTaskGroupById(@PathVariable Long id) {
         taskGroupService.deleteTaskGroupById(id);
     }
