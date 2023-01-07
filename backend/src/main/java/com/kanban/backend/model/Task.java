@@ -1,9 +1,7 @@
 package com.kanban.backend.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
@@ -11,15 +9,18 @@ import java.util.List;
 @Entity(name = "T_TASK")
 @AllArgsConstructor
 @NoArgsConstructor
+@RequiredArgsConstructor
 public class Task {
     @Id
     @GeneratedValue
     private Long id;
+    @NonNull
     private String name;
 
     // Relations
     @ManyToOne
     @JoinColumn(name = "taskgroup_id")
+    @NonNull
     private TaskGroup taskGroup;
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
@@ -33,5 +34,6 @@ public class Task {
                     referencedColumnName = "id"
             )
         )
+    @NonNull
     private List<Tag> tags;
 }
