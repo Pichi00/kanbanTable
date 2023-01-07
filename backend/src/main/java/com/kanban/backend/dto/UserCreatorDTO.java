@@ -1,6 +1,5 @@
 package com.kanban.backend.dto;
 
-import com.kanban.backend.model.Table;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 

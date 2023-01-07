@@ -14,13 +14,14 @@ import java.util.List;
 public class Mapper {
     public UserDTO toDTO(User user) {
         List<Long> tablesId = Collections.emptyList();
-        if (user.getTables().size() > 0){
+        if (user.getTables().size() > 0) {
             tablesId = user.getTables()
                     .stream()
                     .map(Table::getId)
                     .toList();
         }
 
+        // redundant
         UserDTO result = new UserDTO(user.getName(), user.getEmail(), tablesId);
         return result;
     }
