@@ -36,7 +36,7 @@ public class UserController {
         User user = userService.getUserById(id);
 
         if (user == null) {
-            return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
 
         return new ResponseEntity<>(mapper.toDTO(user), HttpStatus.OK);
@@ -46,15 +46,15 @@ public class UserController {
     public ResponseEntity<User> addUser(@RequestBody UserCreatorDTO userCreatorDTO) {
         User user = mapper.toUser(userCreatorDTO);
 
-        if (userCreatorDTO.getTables() != null) {
+        if (userCreatorDTO.getTablesId() != null) {
             userCreatorDTO
-                    .getTables()
+                    .getTablesId()
                     .stream()
                     .map(tableService::getTableById)
                     .forEach(user::addTable);
         }
 
-        return new ResponseEntity<>(userService.addUser(user), HttpStatus.CREATED);
+        return new ResponseEntity<>(userService.addUser(user), HttpStatus.OK);
     }
 
     @DeleteMapping("/users/{id}")
