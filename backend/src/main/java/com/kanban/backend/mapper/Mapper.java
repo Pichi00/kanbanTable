@@ -21,9 +21,7 @@ public class Mapper {
                     .toList();
         }
 
-        // redundant
-        UserDTO result = new UserDTO(user.getName(), user.getEmail(), tablesId);
-        return result;
+        return new UserDTO(user.getName(), user.getEmail(), tablesId);
     }
 
     public User toUser(UserCreatorDTO userCreatorDTO) {
