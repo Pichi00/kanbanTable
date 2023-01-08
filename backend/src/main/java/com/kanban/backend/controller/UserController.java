@@ -3,15 +3,15 @@ package com.kanban.backend.controller;
 import com.kanban.backend.dto.UserCreatorDTO;
 import com.kanban.backend.dto.UserDTO;
 import com.kanban.backend.mapper.Mapper;
-import com.kanban.backend.model.Table;
 import com.kanban.backend.model.User;
 import com.kanban.backend.service.TableService;
 import com.kanban.backend.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,38 +21,54 @@ public class UserController {
     private final Mapper mapper;
 
     @GetMapping("/users")
-    public List<UserDTO> getAllUsers() {
-        return userService
+    public ResponseEntity<List<UserDTO>> getAllUsers() {
+        List<UserDTO> users = userService
                 .getAllUsers()
                 .stream()
                 .map(mapper::toDTO)
-                .collect(Collectors.toList());
+                .toList();
+
+        return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
     @GetMapping("/users/{id}")
-    public UserDTO getUserById(@PathVariable Long id) {
+    public ResponseEntity<UserDTO> getUserById(@PathVariable Long id) {
         User user = userService.getUserById(id);
 
-        return mapper.toDTO(user);
+        if (user == null) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(mapper.toDTO(user), HttpStatus.OK);
     }
 
     @PostMapping("/users")
-    public User addUser(@RequestBody UserCreatorDTO userCreatorDTO) {
+    public ResponseEntity<User> addUser(@RequestBody UserCreatorDTO userCreatorDTO) {
         User user = mapper.toUser(userCreatorDTO);
-        if(userCreatorDTO.getTables() != null){
+
+        if (userCreatorDTO.getTablesId() != null) {
             userCreatorDTO
-                    .getTables()
+                    .getTablesId()
                     .stream()
                     .map(tableService::getTableById)
                     .forEach(user::addTable);
         }
 
+        User userResponse = userService.addUser(user);
 
-        return userService.addUser(user);
+        if (userResponse == null) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<>(userResponse, HttpStatus.OK);
     }
 
     @DeleteMapping("/users/{id}")
-    public void deleteUserById(@PathVariable Long id) {
-        userService.deleteUserById(id);
+    public ResponseEntity<String> deleteUserById(@PathVariable Long id) {
+        if (userService.deleteUserById(id)) {
+            return new ResponseEntity<>("User deleted!", HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>("User not found!", HttpStatus.NOT_FOUND);
     }
 }

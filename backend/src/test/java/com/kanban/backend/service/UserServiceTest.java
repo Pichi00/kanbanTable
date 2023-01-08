@@ -74,6 +74,7 @@ class UserServiceTest {
     void shouldDeleteUser() {
         //given
         final Long id = 1L;
+        given(this.userRepository.existsById(id)).willReturn(true);
 
         //when
         this.subject.deleteUserById(id);

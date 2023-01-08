@@ -19,7 +19,7 @@ public class TaskController {
 
     @GetMapping("/tasks/{id}")
     public Task getTaskById(@PathVariable Long id) {
-        return  taskService.getTaskById(id);
+        return taskService.getTaskById(id);
     }
 
     @PostMapping("/tasks")

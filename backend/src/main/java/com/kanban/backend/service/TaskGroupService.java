@@ -20,7 +20,9 @@ public class TaskGroupService {
         return taskGroupRepository.findById(id).orElse(null);
     }
 
-    public TaskGroup addTaskGroup(TaskGroup taskGroup) { return taskGroupRepository.save(taskGroup); }
+    public TaskGroup addTaskGroup(TaskGroup taskGroup) {
+        return taskGroupRepository.save(taskGroup);
+    }
 
     public void deleteTaskGroupById(Long id) {
         taskGroupRepository.deleteById(id);
