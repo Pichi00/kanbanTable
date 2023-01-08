@@ -54,6 +54,12 @@ public class UserController {
                     .forEach(user::addTable);
         }
 
+        User userResponse = userService.addUser(user);
+
+        if (userResponse == null) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+
         return new ResponseEntity<>(userService.addUser(user), HttpStatus.OK);
     }
 
