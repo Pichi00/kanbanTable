@@ -1,5 +1,6 @@
 package com.kanban.backend.config;
 
+import com.kanban.backend.service.CustomUserDetailsService;
 import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
@@ -13,10 +14,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -28,10 +30,7 @@ import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.oauth2.server.resource.web.BearerTokenAuthenticationEntryPoint;
 import org.springframework.security.oauth2.server.resource.web.access.BearerTokenAccessDeniedHandler;
-import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
-
-import javax.sql.DataSource;
 
 import static org.springframework.boot.autoconfigure.security.servlet.PathRequest.toH2Console;
 
@@ -44,26 +43,28 @@ public class SecurityConfig {
     private final RSAKeyProperties rsaKeyProperties;
 
     @Bean
-    public AuthenticationManager authenticationManager(UserDetailsService userDetailsService) {
-        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
-        authenticationProvider.setUserDetailsService(userDetailsService);
+    public DaoAuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(userDetailsService());
+        authProvider.setPasswordEncoder(passwordEncoder());
 
-        return new ProviderManager(authenticationProvider);
+        return authProvider;
     }
 
     @Bean
-    public UserDetailsService users(DataSource dataSource, PasswordEncoder passwordEncoder) {
-        return new JdbcUserDetailsManager(dataSource);
+    public AuthenticationManager authenticationManager(UserDetailsService userDetailsService) {
+        return new ProviderManager(authenticationProvider());
+    }
+
+    @Bean
+    public UserDetailsService userDetailsService() {
+        return new CustomUserDetailsService();
     }
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
-                .csrf(csrf -> {
-                    csrf.ignoringRequestMatchers(toH2Console());
-                    csrf.ignoringRequestMatchers("/auth/register");
-                    csrf.ignoringRequestMatchers("/auth/token");
-                })
+                .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(toH2Console())
                         .permitAll()
@@ -80,6 +81,9 @@ public class SecurityConfig {
                         .authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint())
                         .accessDeniedHandler(new BearerTokenAccessDeniedHandler())
                 )
+                .headers(headers -> headers
+                        .frameOptions()
+                        .sameOrigin())
                 .build();
     }
 
