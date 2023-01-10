@@ -25,8 +25,4 @@ public class User {
     @OneToMany(mappedBy = "owner")
     @NonNull
     private List<Table> tables;
-
-    public void addTable(Table table) {
-        tables.add(table);
-    }
 }
