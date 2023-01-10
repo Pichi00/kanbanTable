@@ -17,6 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
+    private final TableService tableService;
     private final Mapper mapper;
 
     @GetMapping("/users")
@@ -39,6 +40,27 @@ public class UserController {
         }
 
         return new ResponseEntity<>(mapper.toDTO(user), HttpStatus.OK);
+    }
+
+    @PostMapping("/users")
+    public ResponseEntity<User> addUser(@RequestBody UserCreatorDTO userCreatorDTO) {
+        User user = mapper.toUser(userCreatorDTO);
+
+        if (userCreatorDTO.getTablesId() != null) {
+            userCreatorDTO
+                    .getTablesId()
+                    .stream()
+                    .map(tableService::getTableById)
+                    .forEach(user::addTable);
+        }
+
+        User userResponse = userService.addUser(user);
+
+        if (userResponse == null) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<>(userResponse, HttpStatus.OK);
     }
 
     @DeleteMapping("/users/{id}")
