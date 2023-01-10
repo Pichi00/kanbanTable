@@ -59,8 +59,8 @@ export const SignInScreen = ({ navigation, route }: Props) => {
           secureTextEntry={!passwordVisible}
         />
         <Spacer spacing={theme.spacing.$4} />
-        <IconButton onPress={() => {}} icon="account-plus">
-          log in
+        <IconButton onPress={() => {}} icon="login">
+          Log In
         </IconButton>
         <Text
           style={{

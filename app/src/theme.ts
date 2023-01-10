@@ -3,12 +3,12 @@ import { createTheme } from "./context/theme/themeFactory";
 
 export const theme = {
   colors: {
-    background: "#F5EBE0",
-    surface: "#E3D5CA",
-    surfaceDark: "#D5BDAF",
-    surfaceLight: "#FFFFFF",
+    background: "#F2EBEC",
+    surface: "#4B3030",
+    surfaceDark: "#0C0606",
+    surfaceLight: "#B39999",
 
-    text: "#1E1510",
+    text: "#000",
   },
   spacing: {
     $1: 2,
@@ -31,8 +31,17 @@ export const theme = {
   fontSizes: {
     display: 48,
     title: 32,
+    subtitle: 20,
     body: 16,
     button: 16,
+  },
+  fontFamily: {
+    display: "Montserrat_900Black",
+    title: "Montserrat_700Bold",
+    regular: "Montserrat_400Regular",
+    asulRegular: "Asul_400Regular",
+    asulBold: "Asul_700Bold",
+    body: undefined,
   },
 } satisfies Theme;
 
@@ -40,4 +49,5 @@ type AppTheme = typeof theme;
 
 const { ThemeContext, ThemeProvider, useTheme } = createTheme<typeof theme>();
 
-export { ThemeContext, ThemeProvider, useTheme, AppTheme };
+export { ThemeContext, ThemeProvider, useTheme };
+export type { AppTheme };

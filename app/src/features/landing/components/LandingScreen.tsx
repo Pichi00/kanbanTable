@@ -17,6 +17,7 @@ import {
   RootStackRoutes,
 } from "../../../navigation/types";
 import { BottomSheet } from "../../../components";
+import { moderateScale } from "../../../utils/scaling";
 
 const HERO_IMAGE = require("../../../../assets/images/hero.png");
 
@@ -34,14 +35,14 @@ export const LandingScreen = ({ navigation, route }: Props) => {
     <ScreenContainer
       style={{
         backgroundColor: theme.colors.background,
-        alignItems: "center",
       }}
     >
       <Text
         style={{
           color: theme.colors.text,
           fontSize: theme.fontSizes.display,
-          fontWeight: "bold",
+          alignSelf: "center",
+          fontFamily: theme.fontFamily.asulBold,
         }}
       >
         Dzbanban
@@ -52,7 +53,9 @@ export const LandingScreen = ({ navigation, route }: Props) => {
           width,
           height: undefined,
           aspectRatio: 786 / 563,
-          marginVertical: theme.spacing.$6,
+          marginTop: theme.spacing.$6,
+          marginBottom: theme.spacing.$4,
+          alignSelf: "center",
         }}
         resizeMode="contain"
       />
@@ -60,65 +63,75 @@ export const LandingScreen = ({ navigation, route }: Props) => {
         style={{
           color: theme.colors.text,
           fontSize: theme.fontSizes.title,
-          fontWeight: "bold",
+          fontFamily: theme.fontFamily.asulBold,
         }}
       >
-        Hey! Welcome
+        Big (not only) in Japan
       </Text>
       <Text
         style={{
-          textAlign: "center",
+          textAlign: "left",
           marginVertical: theme.spacing.$4,
           color: theme.colors.text,
+          fontSize: moderateScale(theme.fontSizes.body),
+          fontFamily: theme.fontFamily.asulRegular,
+          letterSpacing: 1.1,
         }}
       >
-        Quisque eu sem non lacus varius porttitor. Aenean nec ultricies lectus,
-        in dapibus turpis.
+        Oh, when you're big in Japan, tonight Big in Japan, be tight Big in
+        Japan, where the Eastern sea's so blue...
       </Text>
-      <Button onPress={() => navigation.navigate(RootStackRoutes.Register)}>
+      <View
+        style={{
+          marginTop: "auto",
+          alignItems: "center",
+        }}
+      >
+        <Button onPress={() => navigation.navigate(RootStackRoutes.Register)}>
+          <Text
+            style={{
+              color: theme.colors.text,
+              fontSize: theme.fontSizes.button,
+              fontWeight: "bold",
+            }}
+          >
+            Get Started
+          </Text>
+        </Button>
         <Text
           style={{
-            color: theme.colors.text,
-            fontSize: theme.fontSizes.button,
-            fontWeight: "bold",
+            color: theme.colors.surface,
+            fontSize: theme.fontSizes.body,
+            marginTop: theme.spacing.$4,
           }}
         >
-          Get Started
+          Already have an account?{" "}
+          <Text
+            onPress={() => navigation.navigate(RootStackRoutes.SignIn)}
+            style={{
+              color: theme.colors.text,
+              fontWeight: "bold",
+              textDecorationLine: "underline",
+            }}
+          >
+            Sign In
+          </Text>
         </Text>
-      </Button>
-      <Text
-        style={{
-          color: theme.colors.surface,
-          fontSize: theme.fontSizes.body,
-          marginTop: theme.spacing.$4,
-        }}
-      >
-        Already have an account?{" "}
         <Text
-          onPress={() => navigation.navigate(RootStackRoutes.SignIn)}
+          onPress={() => {
+            navigation.navigate(RootStackRoutes.App, {
+              screen: AppRoutes.Table,
+            });
+          }}
           style={{
-            color: theme.colors.text,
-            fontWeight: "bold",
-            textDecorationLine: "underline",
+            color: theme.colors.surface,
+            fontSize: theme.fontSizes.body,
+            marginTop: theme.spacing.$4,
           }}
         >
-          Sign In
+          Table screen
         </Text>
-      </Text>
-      <Text
-        onPress={() => {
-          navigation.navigate(RootStackRoutes.App, {
-            screen: AppRoutes.Table,
-          });
-        }}
-        style={{
-          color: theme.colors.surface,
-          fontSize: theme.fontSizes.body,
-          marginTop: theme.spacing.$4,
-        }}
-      >
-        Table screen
-      </Text>
+      </View>
     </ScreenContainer>
   );
 };

@@ -1,5 +1,11 @@
 import { ComponentProps, useCallback, useRef, useState } from "react";
-import { Text, TextInput, TouchableWithoutFeedback, View } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableWithoutFeedback,
+  View,
+} from "react-native";
 import Animated, {
   runOnJS,
   useAnimatedStyle,
@@ -60,82 +66,104 @@ export const Input = ({
 
   return (
     <TouchableWithoutFeedback onPress={focus}>
-      <Animated.View
-        style={[
-          {
-            flexDirection: "row",
-            alignSelf: "stretch",
-            alignItems: "center",
-            paddingHorizontal: theme.spacing.$4,
-            backgroundColor: theme.colors.surfaceLight,
-            borderRadius: theme.radii.$3,
-            overflow: "hidden",
-            borderWidth: 2,
-            borderColor: theme.colors.surfaceDark,
-          },
-        ]}
+      <View
+        style={{
+          alignSelf: "stretch",
+        }}
       >
-        {prefix && (
-          <MaterialCommunityIcons
-            name={prefix.icon}
-            size={24}
-            color={theme.colors.surfaceDark}
-            onPress={prefix.onPress}
-            // style={{ position: "absolute", left: 10, top: 10 }}
-          />
-        )}
         <View
           style={{
-            flex: 1,
-            marginHorizontal: theme.spacing[prefix ? "$4" : "$3"],
-            paddingVertical: theme.spacing.$5,
-            justifyContent: "center",
+            ...StyleSheet.absoluteFillObject,
+            backgroundColor: theme.colors.text,
+            borderRadius: theme.radii.$3,
+            zIndex: -1,
+            transform: [
+              {
+                translateX: theme.spacing.$2,
+              },
+              {
+                translateY: theme.spacing.$2,
+              },
+            ],
           }}
+        />
+        <View
+          style={[
+            {
+              flexDirection: "row",
+              alignItems: "center",
+              paddingHorizontal: theme.spacing.$4,
+              backgroundColor: "#FFF",
+              borderRadius: theme.radii.$3,
+              overflow: "hidden",
+              borderWidth: 2,
+              borderColor: theme.colors.text,
+              zIndex: 1,
+            },
+          ]}
         >
-          <TextInput
-            ref={inputRef}
-            value={value}
-            onChangeText={handleChange}
-            onFocus={() => {
-              isFocused.value = true;
+          {prefix && (
+            <MaterialCommunityIcons
+              name={prefix.icon}
+              size={24}
+              color={theme.colors.text}
+              onPress={prefix.onPress}
+              // style={{ position: "absolute", left: 10, top: 10 }}
+            />
+          )}
+          <View
+            style={{
+              flex: 1,
+              marginHorizontal: theme.spacing[prefix ? "$4" : "$3"],
+              paddingVertical: theme.spacing.$5,
+              justifyContent: "center",
             }}
-            onBlur={() => {
-              isFocused.value = false;
-            }}
-            style={[
-              {
-                alignSelf: "stretch",
-                fontSize: theme.fontSizes.body,
-                color: theme.colors.text,
-              },
-              style,
-            ]}
-            placeholderTextColor={theme.colors.surfaceDark}
-            {...props}
-          />
-          <Animated.Text
-            style={[
-              {
-                position: "absolute",
-                left: 0,
-                color: theme.colors.surfaceDark,
-                fontWeight: "500",
-              },
-              rPlaceholderStyles,
-            ]}
           >
-            {placeholder}
-          </Animated.Text>
+            <TextInput
+              ref={inputRef}
+              value={value}
+              onChangeText={handleChange}
+              onFocus={() => {
+                isFocused.value = true;
+              }}
+              onBlur={() => {
+                isFocused.value = false;
+              }}
+              style={[
+                {
+                  alignSelf: "stretch",
+                  fontSize: theme.fontSizes.body,
+                  color: theme.colors.text,
+                },
+                style,
+              ]}
+              placeholderTextColor={theme.colors.text}
+              {...props}
+            />
+            <Animated.Text
+              style={[
+                {
+                  position: "absolute",
+                  left: 0,
+                  color: theme.colors.text,
+                  fontWeight: "500",
+                },
+                rPlaceholderStyles,
+              ]}
+            >
+              {placeholder}
+            </Animated.Text>
+          </View>
+          {suffix && (
+            <MaterialCommunityIcons
+              name={suffix.icon}
+              size={24}
+              color={theme.colors.text}
+              onPress={suffix.onPress}
+            />
+          )}
         </View>
-        {suffix && (
-          <MaterialCommunityIcons
-            name={suffix.icon}
-            size={24}
-            color={theme.colors.surfaceDark}
-            onPress={suffix.onPress}
-          />
-        )}
-      </Animated.View>
+      </View>
     </TouchableWithoutFeedback>
   );
 };

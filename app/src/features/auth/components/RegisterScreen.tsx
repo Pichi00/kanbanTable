@@ -7,7 +7,6 @@ import MDIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { IconButton } from "../../../components/IconButton";
 import { useState } from "react";
 
-
 type Props = NativeStackScreenProps<
   RootStackParamList,
   typeof RootStackRoutes["Register"]
@@ -17,7 +16,6 @@ export const RegisterScreen = ({ navigation, route }: Props) => {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const { theme } = useTheme();
 
-  
   return (
     <ScreenContainer
       style={{
@@ -67,7 +65,7 @@ export const RegisterScreen = ({ navigation, route }: Props) => {
         />
         <Spacer spacing={theme.spacing.$4} />
         <IconButton onPress={() => {}} icon="account-plus">
-          create an account
+          Create an Account
         </IconButton>
         <Text
           style={{

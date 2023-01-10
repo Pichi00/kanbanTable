@@ -12,47 +12,64 @@ import { useTheme } from "../../theme";
 type Props = {
   children: React.ReactNode;
   style?: ViewStyle;
+  hasKeyobardDismisser?: boolean;
 };
 
-export const ScreenContainer = ({ children, style = {} }: Props) => {
+export const ScreenContainer = ({
+  hasKeyobardDismisser = true,
+  ...props
+}: Props) => {
   const { theme } = useTheme();
 
-  return (
+  return hasKeyobardDismisser ? (
     <TouchableWithoutFeedback
       onPress={() => {
         Keyboard.dismiss();
       }}
     >
-      <SafeAreaView
-        style={[
-          {
-            flex: 1,
-            alignSelf: "stretch",
-            paddingTop: Platform.OS === "android" ? 50 : 0,
-            paddingHorizontal: theme.spacing.$5,
-            paddingBottom: theme.spacing.$5,
-          },
-          style,
-        ]}
-      >
-        {Platform.OS === "android" ? (
-          children
-        ) : (
-          <View
-            style={[
-              {
-                flex: 1,
-                alignSelf: "stretch",
-                paddingHorizontal: theme.spacing.$5,
-                paddingBottom: theme.spacing.$5,
-              },
-              style,
-            ]}
-          >
-            {children}
-          </View>
-        )}
-      </SafeAreaView>
+      <ScreenContainerInner {...props} />
     </TouchableWithoutFeedback>
+  ) : (
+    <ScreenContainerInner {...props} />
+  );
+};
+
+const ScreenContainerInner = ({
+  children,
+  style,
+}: Pick<Props, "children" | "style">) => {
+  const { theme } = useTheme();
+
+  return (
+    <SafeAreaView
+      style={[
+        {
+          flex: 1,
+          alignSelf: "stretch",
+          paddingTop: Platform.OS === "android" ? 50 : 0,
+          paddingHorizontal: theme.spacing.$5,
+          paddingBottom: theme.spacing.$5,
+        },
+        style,
+      ]}
+    >
+      {Platform.OS === "android" ? (
+        children
+      ) : (
+        <View
+          style={[
+            {
+              flex: 1,
+              alignSelf: "stretch",
+              paddingHorizontal: theme.spacing.$5,
+              paddingBottom: theme.spacing.$5,
+            },
+            style,
+          ]}
+        >
+          {children}
+        </View>
+      )}
+    </SafeAreaView>
   );
 };
