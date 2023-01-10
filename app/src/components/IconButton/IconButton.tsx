@@ -8,24 +8,23 @@ type Props = ButtonProps & {
   icon: keyof typeof MaterialCommunityIcons.glyphMap;
 };
 
-export const IconButton = ({ children, icon, onPress }: Props) => {
+export const IconButton = ({ children, icon, ...props }: Props) => {
   const { theme } = useTheme();
 
   return (
     <Button
-      onPress={() => {}}
       style={{
         flexDirection: "row",
         justifyContent: "center",
         paddingHorizontal: theme.spacing.$5,
       }}
+      {...props}
     >
       <Text
         style={{
           color: theme.colors.text,
           fontSize: theme.fontSizes.button,
           fontWeight: "bold",
-          fontVariant: ["small-caps"],
           marginRight: theme.spacing.$4,
         }}
       >

@@ -13,6 +13,9 @@ export type Theme = {
   fontSizes?: {
     [key: string]: number;
   };
+  fontFamily?: {
+    [key: string]: string;
+  };
 };
 
 export type ThemeContextType<AppTheme extends Theme = {}> = {

@@ -31,7 +31,7 @@ export const AppBar = ({ navigation, layout }: DrawerHeaderProps) => {
         style={{
           color: theme.colors.text,
           fontSize: theme.fontSizes.body,
-          fontWeight: "bold",
+          fontFamily: theme.fontFamily.asulBold,
         }}
       >
         Dzbanban
