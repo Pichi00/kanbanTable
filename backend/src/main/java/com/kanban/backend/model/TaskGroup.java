@@ -25,11 +25,8 @@ public class TaskGroup {
     @NonNull
     @JsonIgnore
     private Table table;
-    @OneToMany(mappedBy = "taskGroup")
+    @OneToMany(mappedBy = "taskGroup", fetch = FetchType.EAGER)
     @NonNull
     private List<Task> tasks;
 
-    public void clearTasks() {
-        tasks.clear();
-    }
 }

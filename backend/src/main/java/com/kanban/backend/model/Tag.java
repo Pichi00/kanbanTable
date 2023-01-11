@@ -23,4 +23,8 @@ public class Tag {
     @NonNull
     @JsonIgnore
     private List<Task> tasks;
+
+    public void clearTasks() {
+        tasks.clear();
+    }
 }

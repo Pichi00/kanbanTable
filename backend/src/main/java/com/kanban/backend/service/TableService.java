@@ -1,5 +1,6 @@
 package com.kanban.backend.service;
 
+import com.kanban.backend.exception.ResourceNotFoundException;
 import com.kanban.backend.model.Table;
 import com.kanban.backend.repository.TableRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,12 +18,16 @@ public class TableService {
     }
 
     public Table getTableById(Long id) {
-        return tableRepository.findById(id).orElse(null);
+        return tableRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(Table.class.getSimpleName(), id));
     }
 
-    public Table addTable(Table table) {return tableRepository.save(table); }
+    public Table addTable(Table table) {
+        return tableRepository.save(table);
+    }
 
-    public void deleteTableById(Long id) {
-        tableRepository.deleteById(id);
+    public Table deleteTableById(Long id) {
+        Table tableToDelete = tableRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(Table.class.getSimpleName(), id));
+        tableRepository.delete(tableToDelete);
+        return tableToDelete;
     }
 }

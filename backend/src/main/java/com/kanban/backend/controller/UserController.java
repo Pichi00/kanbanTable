@@ -1,15 +1,15 @@
 package com.kanban.backend.controller;
 
-import com.kanban.backend.dto.UserCreatorDTO;
 import com.kanban.backend.dto.UserDTO;
 import com.kanban.backend.mapper.Mapper;
 import com.kanban.backend.model.User;
-import com.kanban.backend.service.TableService;
 import com.kanban.backend.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -21,32 +21,26 @@ public class UserController {
 
     @GetMapping("/users")
     public ResponseEntity<List<UserDTO>> getAllUsers() {
-        List<UserDTO> users = userService
+        List<UserDTO> responseBody = userService
                 .getAllUsers()
                 .stream()
                 .map(mapper::toDTO)
                 .toList();
 
-        return new ResponseEntity<>(users, HttpStatus.OK);
+        return ResponseEntity.ok().body(responseBody);
     }
 
     @GetMapping("/users/{id}")
     public ResponseEntity<UserDTO> getUserById(@PathVariable Long id) {
         User user = userService.getUserById(id);
-
-        if (user == null) {
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-        }
-
-        return new ResponseEntity<>(mapper.toDTO(user), HttpStatus.OK);
+        UserDTO responseBody = mapper.toDTO(user);
+        return ResponseEntity.ok().body(responseBody);
     }
 
     @DeleteMapping("/users/{id}")
-    public ResponseEntity<String> deleteUserById(@PathVariable Long id) {
-        if (userService.deleteUserById(id)) {
-            return new ResponseEntity<>("User deleted!", HttpStatus.OK);
-        }
-
-        return new ResponseEntity<>("User not found!", HttpStatus.NOT_FOUND);
+    public ResponseEntity<UserDTO> deleteUserById(@PathVariable Long id) {
+        User deletedUser = userService.deleteUserById(id);
+        UserDTO responseBody = mapper.toDTO(deletedUser);
+        return ResponseEntity.ok().body(responseBody);
     }
 }
