@@ -5,6 +5,7 @@ import com.kanban.backend.model.User;
 import com.kanban.backend.service.TableService;
 import com.kanban.backend.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,23 +17,27 @@ public class TableController {
     private final UserService userService;
 
     @GetMapping("/tables")
-    public List<Table> getAllTables() {
-        return tableService.getAllTables();
+    public ResponseEntity<List<Table>> getAllTables() {
+        List<Table> responseBody = tableService.getAllTables();
+        return ResponseEntity.ok().body(responseBody);
     }
 
     @GetMapping("/tables/{id}")
-    public Table getTableById(@PathVariable Long id) {
-        return tableService.getTableById(id);
+    public ResponseEntity<Table> getTableById(@PathVariable Long id) {
+        Table responseBody = tableService.getTableById(id);
+        return ResponseEntity.ok().body(responseBody);
     }
 
     @PostMapping("/tables")
-    public Table addTable(@RequestBody Table table) {
-        return tableService.addTable(table);
+    public ResponseEntity<Table> addTable(@RequestBody Table table) {
+        Table responseBody = tableService.addTable(table);
+        return ResponseEntity.ok().body(responseBody);
     }
 
     @DeleteMapping("/tables/{id}")
-    public void deleteTableById(@PathVariable Long id) {
-        tableService.deleteTableById(id);
+    public ResponseEntity<Table> deleteTableById(@PathVariable Long id) {
+        Table responseBody = tableService.deleteTableById(id);
+        return ResponseEntity.ok().body(responseBody);
     }
 
     @PutMapping("tables/{tableId}/users/{userId}")
