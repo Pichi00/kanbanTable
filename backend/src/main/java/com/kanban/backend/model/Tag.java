@@ -1,5 +1,6 @@
 package com.kanban.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -20,5 +21,6 @@ public class Tag {
     // Relations
     @ManyToMany(mappedBy = "tags")
     @NonNull
+    @JsonIgnore
     private List<Task> tasks;
 }

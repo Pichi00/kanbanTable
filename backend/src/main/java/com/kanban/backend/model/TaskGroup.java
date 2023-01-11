@@ -1,5 +1,6 @@
 package com.kanban.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -22,8 +23,13 @@ public class TaskGroup {
     @ManyToOne
     @JoinColumn(name = "table_id")
     @NonNull
+    @JsonIgnore
     private Table table;
     @OneToMany(mappedBy = "taskGroup")
     @NonNull
     private List<Task> tasks;
+
+    public void clearTasks() {
+        tasks.clear();
+    }
 }

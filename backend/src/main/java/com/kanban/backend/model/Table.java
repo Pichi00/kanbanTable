@@ -1,5 +1,6 @@
 package com.kanban.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -21,7 +22,9 @@ public class Table {
     @ManyToOne
     @JoinColumn(name = "owner_id")
     @NonNull
+    @JsonIgnore
     private User owner;
+
     @OneToMany(mappedBy = "table")
     @NonNull
     private List<TaskGroup> taskGroups;

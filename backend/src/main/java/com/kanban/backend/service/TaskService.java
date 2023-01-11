@@ -1,5 +1,6 @@
 package com.kanban.backend.service;
 
+import com.kanban.backend.exception.ResourceNotFoundException;
 import com.kanban.backend.model.Task;
 import com.kanban.backend.repository.TaskRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +18,7 @@ public class TaskService {
     }
 
     public Task getTaskById(Long id) {
-        return taskRepository.findById(id).orElse(null);
+        return taskRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(Task.class.getSimpleName(), id));
     }
 
     public Task addTask(Task task) {
@@ -25,6 +26,9 @@ public class TaskService {
     }
 
     public void deleteTaskById(Long id) {
+        Task taskToDelete = taskRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(Task.class.getSimpleName(), id));
+        taskToDelete.clearTags();
+        taskRepository.save(taskToDelete);
         taskRepository.deleteById(id);
     }
 }
