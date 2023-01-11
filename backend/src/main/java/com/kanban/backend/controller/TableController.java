@@ -1,5 +1,6 @@
 package com.kanban.backend.controller;
 
+import com.kanban.backend.exception.ResourceNotFoundException;
 import com.kanban.backend.generator.PDFGenerator;
 import com.kanban.backend.model.Table;
 import com.kanban.backend.model.User;
@@ -34,6 +35,10 @@ public class TableController {
         response.setHeader(headerkey, headervalue);
 
         Table table = this.tableService.getTableById(id);
+
+        if (table == null) {
+            throw new ResourceNotFoundException("Table not found!", id);
+        }
 
         PDFGenerator pdfGenerator = new PDFGenerator();
         pdfGenerator.generate(table, response);
