@@ -18,7 +18,7 @@ public class TaskGroupService {
     }
 
     public TaskGroup getTaskGroupById(Long id) {
-        return taskGroupRepository.findById(id).orElse(null);
+        return taskGroupRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(TaskGroup.class.getSimpleName(), id));
     }
 
     public TaskGroup addTaskGroup(TaskGroup taskGroup) {
