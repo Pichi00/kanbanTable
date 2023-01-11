@@ -22,6 +22,7 @@ public class Task {
     @JoinColumn(name = "taskgroup_id")
     @NonNull
     private TaskGroup taskGroup;
+
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "task_tag",
@@ -36,4 +37,8 @@ public class Task {
         )
     @NonNull
     private List<Tag> tags;
+
+    public void addTag(Tag tag){
+        tags.add(tag);
+    }
 }
