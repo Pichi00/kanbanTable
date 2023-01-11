@@ -1,5 +1,6 @@
 package com.kanban.backend.service;
 
+import com.kanban.backend.exception.ResourceNotFoundException;
 import com.kanban.backend.model.User;
 import com.kanban.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +24,7 @@ public class UserService {
     }
 
     public User getUserById(Long id) {
-        return userRepository.findById(id).orElse(null);
+        return userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(User.class.getSimpleName(), id));
     }
 
     public User addUser(User user) {
@@ -49,13 +50,9 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public boolean deleteUserById(Long id) {
-        if (userRepository.existsById(id)) {
-            userRepository.deleteById(id);
-
-            return true;
-        }
-
-        return false;
+    public User deleteUserById(Long id) {
+        User userToDelete = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(User.class.getSimpleName(), id));
+        userRepository.delete(userToDelete);
+        return userToDelete;
     }
 }

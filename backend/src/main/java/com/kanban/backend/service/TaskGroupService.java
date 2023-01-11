@@ -1,5 +1,6 @@
 package com.kanban.backend.service;
 
+import com.kanban.backend.exception.ResourceNotFoundException;
 import com.kanban.backend.model.TaskGroup;
 import com.kanban.backend.repository.TaskGroupRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,14 +18,16 @@ public class TaskGroupService {
     }
 
     public TaskGroup getTaskGroupById(Long id) {
-        return taskGroupRepository.findById(id).orElse(null);
+        return taskGroupRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(TaskGroup.class.getSimpleName(), id));
     }
 
     public TaskGroup addTaskGroup(TaskGroup taskGroup) {
         return taskGroupRepository.save(taskGroup);
     }
 
-    public void deleteTaskGroupById(Long id) {
-        taskGroupRepository.deleteById(id);
+    public TaskGroup deleteTaskGroupById(Long id) {
+        TaskGroup taskGroupToDelete = taskGroupRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(TaskGroup.class.getSimpleName(), id));
+        taskGroupRepository.delete(taskGroupToDelete);
+        return taskGroupToDelete;
     }
 }

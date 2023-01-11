@@ -4,7 +4,6 @@ import com.kanban.backend.dto.UserCreatorDTO;
 import com.kanban.backend.mapper.Mapper;
 import com.kanban.backend.model.LoginRequest;
 import com.kanban.backend.model.User;
-import com.kanban.backend.service.TableService;
 import com.kanban.backend.service.TokenService;
 import com.kanban.backend.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -20,8 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 public class AuthController {
+    private static final Logger LOGGER = LoggerFactory.getLogger(AuthController.class);
     private final UserService userService;
-    private final TableService tableService;
     private final TokenService tokenService;
     private final Mapper mapper;
     private final AuthenticationManager authenticationManager;
@@ -39,10 +38,11 @@ public class AuthController {
     }
 
     @PostMapping("/auth/token")
-    public String token(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<String> token(@RequestBody LoginRequest loginRequest) {
         Authentication authentication = this.authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.email(), loginRequest.password()));
 
-        return this.tokenService.generateToken(authentication);
+        String responseBody = this.tokenService.generateToken(authentication);
+        return ResponseEntity.ok().body(responseBody);
     }
 }

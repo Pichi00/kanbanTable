@@ -1,5 +1,6 @@
 package com.kanban.backend.service;
 
+import com.kanban.backend.exception.ResourceNotFoundException;
 import com.kanban.backend.model.Tag;
 import com.kanban.backend.repository.TagRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,12 +18,16 @@ public class TagService {
     }
 
     public Tag getTagById(Long id) {
-        return tagRepository.findById(id).orElse(null);
+        return tagRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException(Tag.class.getSimpleName(), id));
     }
 
     public Tag addTag(Tag tag) {return tagRepository.save(tag); }
 
-    public void deleteTagById(Long id) {
-        tagRepository.deleteById(id);
+    public Tag deleteTagById(Long id) {
+        Tag tagToDelete = tagRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException(Tag.class.getSimpleName(), id));
+        tagToDelete.clearTasks();
+        tagRepository.save(tagToDelete);
+        tagRepository.delete(tagToDelete);
+        return tagToDelete;
     }
 }

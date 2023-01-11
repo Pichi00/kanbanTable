@@ -5,6 +5,7 @@ import com.kanban.backend.model.TaskGroup;
 import com.kanban.backend.service.TableService;
 import com.kanban.backend.service.TaskGroupService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,31 +17,36 @@ public class TaskGroupController {
     private final TableService tableService;
 
     @GetMapping("/taskgroups")
-    public List<TaskGroup> getAllTaskGroups() {
-        return taskGroupService.getAllTaskGroups();
+    public ResponseEntity<List<TaskGroup>> getAllTaskGroups() {
+        List<TaskGroup> responseBody = taskGroupService.getAllTaskGroups();
+        return ResponseEntity.ok().body(responseBody);
     }
 
     @GetMapping("/taskgroups/{id}")
-    public TaskGroup getTaskGroupById(@PathVariable Long id) {
-        return taskGroupService.getTaskGroupById(id);
+    public ResponseEntity<TaskGroup> getTaskGroupById(@PathVariable Long id) {
+        TaskGroup responseBody = taskGroupService.getTaskGroupById(id);
+        return ResponseEntity.ok().body(responseBody);
     }
 
     @PostMapping("/taskgroups")
-    public TaskGroup addTaskGroup(@RequestBody TaskGroup taskGroup) {
-        return taskGroupService.addTaskGroup(taskGroup);
+    public ResponseEntity<TaskGroup> addTaskGroup(@RequestBody TaskGroup taskGroup) {
+        TaskGroup responseBody = taskGroupService.addTaskGroup(taskGroup);
+        return ResponseEntity.ok().body(responseBody);
     }
 
     @DeleteMapping("/taskgroups/{id}")
-    public void deleteTaskGroupById(@PathVariable Long id) {
-        taskGroupService.deleteTaskGroupById(id);
+    public ResponseEntity<TaskGroup> deleteTaskGroupById(@PathVariable Long id) {
+        TaskGroup responseBody = taskGroupService.deleteTaskGroupById(id);
+        return ResponseEntity.ok().body(responseBody);
     }
 
     @PutMapping("taskgroups/{taskGroupId}/tables/{tableId}")
-    public TaskGroup assignTableToTaskGroup(@PathVariable Long taskGroupId, @PathVariable Long tableId) {
+    public ResponseEntity<TaskGroup> assignTableToTaskGroup(@PathVariable Long taskGroupId, @PathVariable Long tableId) {
         TaskGroup taskGroup = taskGroupService.getTaskGroupById(taskGroupId);
         Table table = tableService.getTableById(tableId);
 
         taskGroup.setTable(table);
-        return taskGroupService.addTaskGroup(taskGroup);
+        TaskGroup responseBody = taskGroupService.addTaskGroup(taskGroup);
+        return ResponseEntity.ok().body(responseBody);
     }
 }
