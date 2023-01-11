@@ -22,7 +22,7 @@ public class User {
     private String password;
 
     // Relations
-    @OneToMany(mappedBy = "owner")
+    @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER)
     @NonNull
     private List<Table> tables;
 }
