@@ -16,7 +16,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,14 +23,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 public class AuthController {
+    private static final Logger LOGGER = LoggerFactory.getLogger(AuthController.class);
     private final UserService userService;
     private final TableService tableService;
     private final TokenService tokenService;
     private final Mapper mapper;
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(AuthController.class);
 
     @PostMapping("/auth/register")
     public ResponseEntity<User> register(@RequestBody UserCreatorDTO userCreatorDTO) {
@@ -46,10 +44,11 @@ public class AuthController {
     }
 
     @PostMapping("/auth/token")
-    public String token(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<String> token(@RequestBody LoginRequest loginRequest) {
         Authentication authentication = this.authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.email(), loginRequest.password()));
 
-        return this.tokenService.generateToken(authentication);
+        String responseBody = this.tokenService.generateToken(authentication);
+        return ResponseEntity.ok().body(responseBody);
     }
 }

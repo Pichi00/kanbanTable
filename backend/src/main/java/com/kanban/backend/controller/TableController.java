@@ -41,11 +41,12 @@ public class TableController {
     }
 
     @PutMapping("tables/{tableId}/users/{userId}")
-    public Table assignOwnerToTable(@PathVariable Long tableId, @PathVariable Long userId) {
+    public ResponseEntity<Table> assignOwnerToTable(@PathVariable Long tableId, @PathVariable Long userId) {
         Table table = tableService.getTableById(tableId);
         User owner = userService.getUserById(userId);
 
         table.setOwner(owner);
-        return tableService.addTable(table);
+        Table responseBody = tableService.addTable(table);
+        return ResponseEntity.ok().body(responseBody);
     }
 }

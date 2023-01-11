@@ -53,7 +53,6 @@ public class TaskController {
         return ResponseEntity.ok(responseBody);
     }
 
-    //TODO: Consider returning TaskGroup instead of Task
     @PutMapping("tasks/{taskId}/taskgroups/{taskGroupId}")
     public ResponseEntity<Task> assignTaskToTaskGroup(@PathVariable Long taskId, @PathVariable Long taskGroupId) {
         Task task = taskService.getTaskById(taskId);
