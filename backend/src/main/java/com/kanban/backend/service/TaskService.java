@@ -26,6 +26,9 @@ public class TaskService {
     }
 
     public void deleteTaskById(Long id) {
+        Task taskToDelete = taskRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(Task.class.getSimpleName(), id));
+        taskToDelete.clearTags();
+        taskRepository.save(taskToDelete);
         taskRepository.deleteById(id);
     }
 }

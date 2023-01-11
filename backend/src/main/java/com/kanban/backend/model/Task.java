@@ -41,4 +41,8 @@ public class Task {
     public void addTag(Tag tag){
         tags.add(tag);
     }
+
+    public void clearTags(){
+        tags.clear();
+    }
 }
