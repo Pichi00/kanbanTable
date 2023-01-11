@@ -1,5 +1,6 @@
 package com.kanban.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -21,6 +22,7 @@ public class Task {
     @ManyToOne
     @JoinColumn(name = "taskgroup_id")
     @NonNull
+    @JsonIgnore
     private TaskGroup taskGroup;
 
     @ManyToMany(cascade = CascadeType.ALL)

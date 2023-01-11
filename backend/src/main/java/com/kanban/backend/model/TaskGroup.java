@@ -26,4 +26,8 @@ public class TaskGroup {
     @OneToMany(mappedBy = "taskGroup")
     @NonNull
     private List<Task> tasks;
+
+    public void clearTasks(){
+        tasks.clear();
+    }
 }
