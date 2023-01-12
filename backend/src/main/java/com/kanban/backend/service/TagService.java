@@ -21,19 +21,21 @@ public class TagService {
     }
 
     public Tag getTagById(Long id) {
-        return tagRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException(Tag.class.getSimpleName(), id));
+        return tagRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(Tag.class.getSimpleName(), id));
     }
 
-    public Tag addTag(Tag tag) {return tagRepository.save(tag); }
+    public Tag addTag(Tag tag) {
+        return tagRepository.save(tag);
+    }
 
     public Tag deleteTagById(Long id) {
-        Tag tagToDelete = tagRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException(Tag.class.getSimpleName(), id));
+        Tag tagToDelete = tagRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(Tag.class.getSimpleName(), id));
         List<Task> tasksToUpdate = tagToDelete.getTasks();
 
         // Update tasks that have the tag we want to delete
-        for (Task task:tasksToUpdate) {
+        for (Task task : tasksToUpdate) {
             Task taskToUpdate = taskRepository.findById(task.getId()).orElseThrow(() -> new ResourceNotFoundException(Task.class.getSimpleName(), id));
-            taskToUpdate.clearTags();
+            taskToUpdate.removeTag(tagToDelete);
             taskRepository.save(taskToUpdate);
         }
 
