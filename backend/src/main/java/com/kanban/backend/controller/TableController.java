@@ -76,6 +76,13 @@ public class TableController {
         return ResponseEntity.ok().body(responseBody);
     }
 
+    @PutMapping("/tables/{id}")
+    public ResponseEntity<Table> updateTable(@PathVariable Long id,
+                                             @RequestBody Table newTable) {
+        Table responseBody = tableService.updateTable(id, newTable);
+        return ResponseEntity.ok().body(responseBody);
+    }
+
     @PutMapping("tables/{tableId}/users/{userId}")
     public ResponseEntity<Table> assignOwnerToTable(@PathVariable Long tableId, @PathVariable Long userId) {
         Table table = tableService.getTableById(tableId);
