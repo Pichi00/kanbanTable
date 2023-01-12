@@ -1,5 +1,6 @@
 package com.kanban.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -22,9 +23,11 @@ public class User {
     private String password;
 
     // Relations
-    @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER)
     @NonNull
+    @OneToMany(mappedBy = "owner")
     private List<Table> tables;
+
     @OneToMany(mappedBy = "user")
+    @NonNull
     private List<UserTableRole> userTableRoles;
 }

@@ -1,22 +1,29 @@
 package com.kanban.backend.model;
 
-import com.kanban.backend.enums.Role;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 @Data
+@NoArgsConstructor
+@RequiredArgsConstructor
+@AllArgsConstructor
 @Entity(name = "T_USER_TABLE_ROLE")
 public class UserTableRole {
     @Id
     @GeneratedValue
     private Long id;
-    private Role role;
+    private String role;
 
     // Relations
+    @NonNull
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "user_id")
     private User user;
+    @NonNull
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "table_id")
     private Table table;
 }

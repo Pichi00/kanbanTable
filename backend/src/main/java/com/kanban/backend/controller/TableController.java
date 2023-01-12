@@ -1,15 +1,22 @@
 package com.kanban.backend.controller;
 
-
+import com.kanban.backend.dto.TableCreatorDTO;
+import com.kanban.backend.enums.Role;
 import com.kanban.backend.exception.ResourceNotFoundException;
 import com.kanban.backend.generator.PDFGenerator;
+import com.kanban.backend.mapper.Mapper;
 import com.kanban.backend.model.Table;
 import com.kanban.backend.model.User;
+import com.kanban.backend.model.UserTableRole;
 import com.kanban.backend.service.TableService;
 import com.kanban.backend.service.UserService;
+import com.kanban.backend.service.UserTableRoleService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -23,6 +30,8 @@ import java.util.List;
 public class TableController {
     private final TableService tableService;
     private final UserService userService;
+    private final UserTableRoleService userTableRoleService;
+    private final Mapper mapper;
 
     @GetMapping("/pdf/{id}")
     public void generatePDF(@PathVariable Long id, HttpServletResponse response) throws IOException {
@@ -59,15 +68,17 @@ public class TableController {
     }
 
     @PostMapping("/tables")
-    public ResponseEntity<Table> addTable(@RequestBody Table table,
-                                          @RequestParam(defaultValue = "0") Long owner) {
+    public ResponseEntity<Table> addTable(@RequestBody TableCreatorDTO tableCreatorDTO) {
+        Authentication authentication = SecurityContextHolder
+                .getContext()
+                .getAuthentication();
+        Jwt jwt = (Jwt) authentication.getPrincipal();
+        Long userId = jwt.getClaim("id");
+        User owner = this.userService.getUserById(userId);
+        Table table = this.mapper.toTable(tableCreatorDTO, owner);
+        Table responseBody = this.tableService.addTable(table);
+        this.userTableRoleService.addUserTableRole(new UserTableRole(null, Role.OWNER.name(), owner, table));
 
-        if (owner != 0) {
-            User ownerToAssign = userService.getUserById(owner);
-            table.setOwner(ownerToAssign);
-        }
-
-        Table responseBody = tableService.addTable(table);
         return ResponseEntity.ok().body(responseBody);
     }
 
