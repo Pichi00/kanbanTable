@@ -1,10 +1,12 @@
 package com.kanban.backend.service;
 
-import com.kanban.backend.model.*;
+import com.kanban.backend.model.Tag;
+import com.kanban.backend.model.Task;
 import com.kanban.backend.repository.TagRepository;
+import com.kanban.backend.repository.TaskRepository;
 import org.assertj.core.api.AssertionsForClassTypes;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
@@ -13,20 +15,21 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 import java.util.Optional;
 
-import static org.mockito.Mockito.verify;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class TagServiceTest {
 
     @Mock
     private TagRepository tagRepository;
+    private TaskRepository taskRepository;
 
     private TagService subject;
 
     @BeforeEach
-    void setUp(){
-        this.subject = new TagService(this.tagRepository);
+    void setUp() {
+        this.subject = new TagService(this.tagRepository, this.taskRepository);
     }
 
     @Test

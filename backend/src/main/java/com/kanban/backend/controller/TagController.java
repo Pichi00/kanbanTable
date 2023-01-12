@@ -36,4 +36,12 @@ public class TagController {
         Tag responseBody = tagService.deleteTagById(id);
         return ResponseEntity.ok().body(responseBody);
     }
+
+    @PutMapping("/tags/{id}")
+    public ResponseEntity<Tag> updateTag(@PathVariable Long id,
+                                         @RequestBody Tag newTag) {
+        Tag responseBody = tagService.updateTag(id, newTag);
+
+        return ResponseEntity.ok().body(responseBody);
+    }
 }

@@ -42,4 +42,14 @@ public class TagService {
         tagRepository.deleteById(id);
         return tagToDelete;
     }
+
+    public Tag updateTag(Long id, Tag newTag) {
+        Tag tagToUpdate = tagRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(Tag.class.getSimpleName(), id));
+
+        if (newTag.getName() != null) {
+            tagToUpdate.setName(newTag.getName());
+        }
+
+        return tagRepository.save(tagToUpdate);
+    }
 }
