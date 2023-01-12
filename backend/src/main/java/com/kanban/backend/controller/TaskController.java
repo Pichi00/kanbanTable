@@ -59,8 +59,16 @@ public class TaskController {
         return ResponseEntity.ok(responseBody);
     }
 
+    @PutMapping("/tasks/{id}")
+    public ResponseEntity<Task> updateTask(@PathVariable Long id,
+                                           @RequestBody Task newTask) {
+        Task responseBody = taskService.updateTask(id, newTask);
+        return ResponseEntity.ok().body(responseBody);
+    }
+
     @PutMapping("tasks/{taskId}/tags/{tagId}")
-    public ResponseEntity<Task> addTagToTask(@PathVariable Long taskId, @PathVariable Long tagId) {
+    public ResponseEntity<Task> addTagToTask(@PathVariable Long taskId,
+                                             @PathVariable Long tagId) {
         Task task = taskService.getTaskById(taskId);
         Tag tag = tagService.getTagById(tagId);
 
@@ -70,7 +78,8 @@ public class TaskController {
     }
 
     @PutMapping("tasks/{taskId}/taskgroups/{taskGroupId}")
-    public ResponseEntity<Task> assignTaskToTaskGroup(@PathVariable Long taskId, @PathVariable Long taskGroupId) {
+    public ResponseEntity<Task> assignTaskToTaskGroup(@PathVariable Long taskId,
+                                                      @PathVariable Long taskGroupId) {
         Task task = taskService.getTaskById(taskId);
         TaskGroup taskGroup = taskGroupService.getTaskGroupById(taskGroupId);
 
