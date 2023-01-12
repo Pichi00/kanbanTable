@@ -1,5 +1,6 @@
 package com.kanban.backend.mapper;
 
+import com.kanban.backend.dto.TableCreatorDTO;
 import com.kanban.backend.dto.UserCreatorDTO;
 import com.kanban.backend.dto.UserDTO;
 import com.kanban.backend.model.Table;
@@ -30,6 +31,16 @@ public class Mapper {
                 userCreatorDTO.getName(),
                 userCreatorDTO.getEmail(),
                 userCreatorDTO.getPassword(),
+                new ArrayList<>(),
+                new ArrayList<>()
+        );
+    }
+
+    public Table toTable(TableCreatorDTO tableCreatorDTO, User owner) {
+        return new Table(
+                null,
+                tableCreatorDTO.getName(),
+                owner,
                 new ArrayList<>(),
                 new ArrayList<>()
         );

@@ -1,12 +1,14 @@
 package com.kanban.backend.config;
 
 import com.kanban.backend.model.User;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 
+@Data
 @RequiredArgsConstructor
 public class UserCustomDetails implements UserDetails {
     private final User user;
@@ -14,6 +16,10 @@ public class UserCustomDetails implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;
+    }
+
+    public Long getId() {
+        return user.getId();
     }
 
     @Override
