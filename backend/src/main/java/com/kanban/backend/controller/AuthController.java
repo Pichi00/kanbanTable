@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 public class AuthController {
-    private static final Logger LOGGER = LoggerFactory.getLogger(AuthController.class);
     private final UserService userService;
     private final TokenService tokenService;
     private final Mapper mapper;

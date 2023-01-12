@@ -1,6 +1,7 @@
 package com.kanban.backend.service;
 
 import com.kanban.backend.exception.ResourceNotFoundException;
+import com.kanban.backend.model.Table;
 import com.kanban.backend.model.User;
 import com.kanban.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ import java.util.regex.Pattern;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
+    private final TableService tableService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -52,6 +54,11 @@ public class UserService {
 
     public User deleteUserById(Long id) {
         User userToDelete = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(User.class.getSimpleName(), id));
+
+        for (Table table : userToDelete.getTables()) {
+            tableService.deleteTableById(table.getId());
+        }
+
         userRepository.delete(userToDelete);
         return userToDelete;
     }
