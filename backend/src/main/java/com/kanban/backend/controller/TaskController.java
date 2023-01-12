@@ -77,6 +77,17 @@ public class TaskController {
         return ResponseEntity.ok(responseBody);
     }
 
+    @DeleteMapping("tasks/{taskId}/tags/{tagId}")
+    public ResponseEntity<Task> removeTagFromTask(@PathVariable Long taskId,
+                                                  @PathVariable Long tagId) {
+        Task task = taskService.getTaskById(taskId);
+        Tag tag = tagService.getTagById(tagId);
+
+        task.removeTag(tag);
+        Task responseBody = taskService.addTask(task);
+        return ResponseEntity.ok(responseBody);
+    }
+
     @PutMapping("tasks/{taskId}/taskgroups/{taskGroupId}")
     public ResponseEntity<Task> assignTaskToTaskGroup(@PathVariable Long taskId,
                                                       @PathVariable Long taskGroupId) {
