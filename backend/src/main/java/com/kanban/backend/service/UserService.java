@@ -1,5 +1,6 @@
 package com.kanban.backend.service;
 
+import com.kanban.backend.dto.UserCreatorDTO;
 import com.kanban.backend.exception.ResourceNotFoundException;
 import com.kanban.backend.model.Table;
 import com.kanban.backend.model.User;
@@ -61,5 +62,15 @@ public class UserService {
 
         userRepository.delete(userToDelete);
         return userToDelete;
+    }
+
+    public User updateUser(Long id, UserCreatorDTO newUserDTO) {
+        User userToUpdate = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(User.class.getSimpleName(), id));
+
+        if (newUserDTO.getName() != null) {
+            userToUpdate.setName(newUserDTO.getName());
+        }
+
+        return userRepository.save(userToUpdate);
     }
 }

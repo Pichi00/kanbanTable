@@ -1,15 +1,13 @@
 package com.kanban.backend.controller;
 
+import com.kanban.backend.dto.UserCreatorDTO;
 import com.kanban.backend.dto.UserDTO;
 import com.kanban.backend.mapper.Mapper;
 import com.kanban.backend.model.User;
 import com.kanban.backend.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -41,6 +39,14 @@ public class UserController {
     public ResponseEntity<UserDTO> deleteUserById(@PathVariable Long id) {
         User deletedUser = userService.deleteUserById(id);
         UserDTO responseBody = mapper.toDTO(deletedUser);
+        return ResponseEntity.ok().body(responseBody);
+    }
+
+    @PutMapping("/users/{id}")
+    public ResponseEntity<UserDTO> updateUser(@PathVariable Long id,
+                                              @RequestBody UserCreatorDTO newUserDTO) {
+        User updatedUser = userService.updateUser(id, newUserDTO);
+        UserDTO responseBody = mapper.toDTO(updatedUser);
         return ResponseEntity.ok().body(responseBody);
     }
 }
