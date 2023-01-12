@@ -58,7 +58,14 @@ public class TableController {
     }
 
     @PostMapping("/tables")
-    public ResponseEntity<Table> addTable(@RequestBody Table table) {
+    public ResponseEntity<Table> addTable(@RequestBody Table table,
+                                          @RequestParam(defaultValue = "0") Long owner) {
+
+        if (owner != 0) {
+            User ownerToAssign = userService.getUserById(owner);
+            table.setOwner(ownerToAssign);
+        }
+
         Table responseBody = tableService.addTable(table);
         return ResponseEntity.ok().body(responseBody);
     }
