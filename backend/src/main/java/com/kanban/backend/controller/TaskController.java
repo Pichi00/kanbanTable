@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -32,11 +33,21 @@ public class TaskController {
     }
 
     @PostMapping("/tasks")
-    public ResponseEntity<Task> addTask(@RequestBody Task task, @RequestParam(defaultValue = "0") Long taskGroup) {
+    public ResponseEntity<Task> addTask(@RequestBody Task task,
+                                        @RequestParam(defaultValue = "0") Long taskGroup,
+                                        @RequestParam(defaultValue = "0") List<Long> tags) {
 
         if (taskGroup != 0) {
             TaskGroup taskGroupToAssign = taskGroupService.getTaskGroupById(taskGroup);
             task.setTaskGroup(taskGroupToAssign);
+        }
+        if (!tags.contains(0L)) {
+            List<Tag> tagsToAssign = new ArrayList<>();
+            for (Long tagId : tags) {
+                Tag tag = tagService.getTagById(tagId);
+                tagsToAssign.add(tag);
+            }
+            task.setTags(tagsToAssign);
         }
         Task responseBody = taskService.addTask(task);
         return ResponseEntity.ok(responseBody);

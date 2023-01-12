@@ -36,15 +36,19 @@ public class Task {
                     name = "task_id",
                     referencedColumnName = "id"
             )
-        )
+    )
     @NonNull
     private List<Tag> tags;
 
-    public void addTag(Tag tag){
+    public void addTag(Tag tag) {
         tags.add(tag);
     }
 
-    public void clearTags(){
+    public void clearTags() {
         tags.clear();
+    }
+
+    public void removeTag(Tag tagToDelete) {
+        tags.remove(tagToDelete);
     }
 }
