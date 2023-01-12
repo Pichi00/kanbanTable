@@ -32,4 +32,12 @@ public class TaskService {
         taskRepository.deleteById(id);
         return taskToDelete;
     }
+
+    public Task updateTask(Long id, Task newTask) {
+        Task taskToUpdate = taskRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(Task.class.getSimpleName(), id));
+        if (newTask.getName() != null) {
+            taskToUpdate.setName(newTask.getName());
+        }
+        return taskRepository.save(taskToUpdate);
+    }
 }

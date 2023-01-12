@@ -37,4 +37,14 @@ public class TableService {
         tableRepository.delete(tableToDelete);
         return tableToDelete;
     }
+
+    public Table updateTable(Long id, Table newTable) {
+        Table tableToUpdate = tableRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(Table.class.getSimpleName(), id));
+
+        if (newTable.getName() != null) {
+            tableToUpdate.setName(newTable.getName());
+        }
+
+        return tableRepository.save(tableToUpdate);
+    }
 }
