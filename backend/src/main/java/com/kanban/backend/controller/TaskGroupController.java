@@ -46,6 +46,13 @@ public class TaskGroupController {
         return ResponseEntity.ok().body(responseBody);
     }
 
+    @PutMapping("/taskgroups/{id}")
+    public ResponseEntity<TaskGroup> updateTaskGroup(@PathVariable Long id,
+                                                     @RequestBody TaskGroup newTaskGroup) {
+        TaskGroup responseBody = taskGroupService.updateTaskGroup(id, newTaskGroup);
+        return ResponseEntity.ok().body(responseBody);
+    }
+
     @PutMapping("taskgroups/{taskGroupId}/tables/{tableId}")
     public ResponseEntity<TaskGroup> assignTableToTaskGroup(@PathVariable Long taskGroupId, @PathVariable Long tableId) {
         TaskGroup taskGroup = taskGroupService.getTaskGroupById(taskGroupId);
