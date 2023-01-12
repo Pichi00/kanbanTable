@@ -32,7 +32,12 @@ public class TaskController {
     }
 
     @PostMapping("/tasks")
-    public ResponseEntity<Task> addTask(@RequestBody Task task) {
+    public ResponseEntity<Task> addTask(@RequestBody Task task, @RequestParam(defaultValue = "0") Long taskGroup) {
+
+        if (taskGroup != 0) {
+            TaskGroup taskGroupToAssign = taskGroupService.getTaskGroupById(taskGroup);
+            task.setTaskGroup(taskGroupToAssign);
+        }
         Task responseBody = taskService.addTask(task);
         return ResponseEntity.ok(responseBody);
     }
