@@ -29,7 +29,13 @@ public class TaskGroupController {
     }
 
     @PostMapping("/taskgroups")
-    public ResponseEntity<TaskGroup> addTaskGroup(@RequestBody TaskGroup taskGroup) {
+    public ResponseEntity<TaskGroup> addTaskGroup(@RequestBody TaskGroup taskGroup,
+                                                  @RequestParam(defaultValue = "0") Long table) {
+
+        if (table != 0) {
+            Table tableToAssign = tableService.getTableById(table);
+            taskGroup.setTable(tableToAssign);
+        }
         TaskGroup responseBody = taskGroupService.addTaskGroup(taskGroup);
         return ResponseEntity.ok().body(responseBody);
     }
