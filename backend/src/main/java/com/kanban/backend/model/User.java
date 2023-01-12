@@ -25,4 +25,6 @@ public class User {
     @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER)
     @NonNull
     private List<Table> tables;
+    @OneToMany(mappedBy = "user")
+    private List<UserTableRole> userTableRoles;
 }

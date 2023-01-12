@@ -30,6 +30,7 @@ public class Mapper {
                 userCreatorDTO.getName(),
                 userCreatorDTO.getEmail(),
                 userCreatorDTO.getPassword(),
+                new ArrayList<>(),
                 new ArrayList<>()
         );
     }

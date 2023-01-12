@@ -24,8 +24,9 @@ public class Table {
     @NonNull
     @JsonIgnore
     private User owner;
-
     @OneToMany(mappedBy = "table", fetch = FetchType.EAGER)
     @NonNull
     private List<TaskGroup> taskGroups;
+    @OneToMany(mappedBy = "table")
+    private List<UserTableRole> userTableRoles;
 }
