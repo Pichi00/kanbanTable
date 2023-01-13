@@ -1,6 +1,8 @@
 package com.kanban.backend.service;
 
-import com.kanban.backend.model.*;
+import com.kanban.backend.model.Tag;
+import com.kanban.backend.model.Task;
+import com.kanban.backend.model.TaskGroup;
 import com.kanban.backend.repository.TaskRepository;
 import org.assertj.core.api.AssertionsForClassTypes;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,6 +12,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,7 +28,7 @@ class TaskServiceTest {
     private TaskService subject;
 
     @BeforeEach
-    void setUp(){
+    void setUp() {
         this.subject = new TaskService(this.taskRepository);
     }
 
@@ -42,7 +45,7 @@ class TaskServiceTest {
     void shouldGetTaskById() {
         //given
         final Long id = 1L;
-        final Task returnedOutput = new Task(id, "Cv27HKG0nJ", new TaskGroup(),List.of(new Tag()));
+        final Task returnedOutput = new Task(id, "Cv27HKG0nJ", new TaskGroup(), List.of(new Tag()));
         given(this.taskRepository.findById(id)).willReturn(Optional.of(returnedOutput));
 
         //when
@@ -55,7 +58,7 @@ class TaskServiceTest {
     @Test
     void shouldAddTask() {
         //given
-        final Task givenInput = new Task("91XDt",new TaskGroup(),List.of(new Tag()));
+        final Task givenInput = new Task("91XDt", new TaskGroup(), List.of(new Tag()));
 
         //when
         this.subject.addTask(givenInput);
@@ -72,6 +75,8 @@ class TaskServiceTest {
     void shouldDeleteTaskById() {
         //given
         final Long id = 1L;
+        final Task taskToDelete = new Task(id, "V42mtf4NZmIUQLb", new TaskGroup(), Collections.emptyList());
+        given(this.taskRepository.findById(id)).willReturn(Optional.of(taskToDelete));
 
         //when
         this.subject.deleteTaskById(id);

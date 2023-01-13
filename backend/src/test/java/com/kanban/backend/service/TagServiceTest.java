@@ -12,6 +12,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -76,6 +77,8 @@ class TagServiceTest {
     void shouldDeleteTagById() {
         //given
         final Long id = 1L;
+        final Tag tagToDelete = new Tag(id, "q556cIWu1", Collections.emptyList());
+        given(tagRepository.findById(id)).willReturn(Optional.of(tagToDelete));
 
         //when
         this.subject.deleteTagById(id);
