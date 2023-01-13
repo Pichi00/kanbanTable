@@ -25,7 +25,15 @@ public class Mapper {
                     .toList();
         }
 
-        return new UserDTO(user.getName(), user.getEmail(), tablesId);
+        List<Long> userTableRolesId = Collections.emptyList();
+        if (user.getUserTableRoles().size() > 0) {
+            userTableRolesId = user.getUserTableRoles()
+                    .stream()
+                    .map(UserTableRole::getId)
+                    .toList();
+        }
+
+        return new UserDTO(user.getName(), user.getEmail(), tablesId, userTableRolesId);
     }
 
     public User toUser(UserCreatorDTO userCreatorDTO) {

@@ -114,4 +114,18 @@ public class TableController {
 
         return ResponseEntity.ok().body(responseBody);
     }
+
+    @PutMapping("tables/{tableId}/users/{userId}/roles/{role}")
+    public ResponseEntity<TableDTO> assignRoleToTable(@PathVariable Long tableId,
+                                                      @PathVariable Long userId,
+                                                      @PathVariable Role role) {
+        Table table = tableService.getTableById(tableId);
+        User user = userService.getUserById(userId);
+
+        this.userTableRoleService.addUserTableRole(new UserTableRole(null, role.name(), user, table));
+
+        TableDTO responseBody = this.mapper.toTableDTO(table);
+
+        return ResponseEntity.ok().body(responseBody);
+    }
 }

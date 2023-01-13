@@ -1,6 +1,5 @@
 package com.kanban.backend.dto;
 
-import com.kanban.backend.model.TaskGroup;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
