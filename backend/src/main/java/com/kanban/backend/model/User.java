@@ -23,10 +23,6 @@ public class User {
     private String password;
 
     // Relations
-    @NonNull
-    @OneToMany(mappedBy = "owner")
-    private List<Table> tables;
-
     @OneToMany(mappedBy = "user")
     @NonNull
     private List<UserTableRole> userTableRoles;

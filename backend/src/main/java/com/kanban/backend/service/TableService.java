@@ -20,7 +20,8 @@ public class TableService {
     }
 
     public Table getTableById(Long id) {
-        return tableRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(Table.class.getSimpleName(), id));
+        return tableRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException(Table.class.getSimpleName(), id));
     }
 
     public Table addTable(Table table) {
@@ -28,7 +29,8 @@ public class TableService {
     }
 
     public Table deleteTableById(Long id) {
-        Table tableToDelete = tableRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(Table.class.getSimpleName(), id));
+        Table tableToDelete = tableRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException(Table.class.getSimpleName(), id));
 
         for (TaskGroup taskGroup : tableToDelete.getTaskGroups()) {
             taskGroupService.deleteTaskGroupById(taskGroup.getId());
@@ -39,7 +41,8 @@ public class TableService {
     }
 
     public Table updateTable(Long id, Table newTable) {
-        Table tableToUpdate = tableRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(Table.class.getSimpleName(), id));
+        Table tableToUpdate = tableRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException(Table.class.getSimpleName(), id));
 
         if (newTable.getName() != null) {
             tableToUpdate.setName(newTable.getName());

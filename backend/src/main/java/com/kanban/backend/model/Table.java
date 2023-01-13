@@ -19,11 +19,6 @@ public class Table {
     private String name;
 
     // Relations
-    @ManyToOne
-    @JoinColumn(name = "owner_id")
-    @NonNull
-    @JsonIgnore
-    private User owner;
     @OneToMany(mappedBy = "table")
     @NonNull
     private List<TaskGroup> taskGroups;

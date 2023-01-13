@@ -82,7 +82,7 @@ public class TableController {
         Jwt jwt = (Jwt) authentication.getPrincipal();
         Long userId = jwt.getClaim("id");
         User owner = this.userService.getUserById(userId);
-        Table table = this.mapper.toTable(tableCreatorDTO, owner);
+        Table table = this.mapper.toTable(tableCreatorDTO);
         TableDTO responseBody = this.mapper.toTableDTO(this.tableService.addTable(table));
 
         this.userTableRoleService.addUserTableRole(new UserTableRole(null, Role.OWNER.name(), owner, table));
@@ -101,17 +101,6 @@ public class TableController {
     public ResponseEntity<TableDTO> updateTable(@PathVariable Long id,
                                              @RequestBody Table newTable) {
         TableDTO responseBody = this.mapper.toTableDTO(tableService.updateTable(id, newTable));
-        return ResponseEntity.ok().body(responseBody);
-    }
-
-    @PutMapping("tables/{tableId}/users/{userId}")
-    public ResponseEntity<TableDTO> assignOwnerToTable(@PathVariable Long tableId, @PathVariable Long userId) {
-        Table table = tableService.getTableById(tableId);
-        User owner = userService.getUserById(userId);
-
-        table.setOwner(owner);
-        TableDTO responseBody = this.mapper.toTableDTO(tableService.addTable(table));
-
         return ResponseEntity.ok().body(responseBody);
     }
 

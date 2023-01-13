@@ -10,6 +10,5 @@ import java.util.List;
 public class UserDTO {
     private final String name;
     private final String email;
-    private final List<Long> tablesId;
     private final List<Long> userTableRolesId;
 }

@@ -20,7 +20,8 @@ public class TaskGroupService {
     }
 
     public TaskGroup getTaskGroupById(Long id) {
-        return taskGroupRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(TaskGroup.class.getSimpleName(), id));
+        return taskGroupRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException(TaskGroup.class.getSimpleName(), id));
     }
 
     public TaskGroup addTaskGroup(TaskGroup taskGroup) {
@@ -28,7 +29,8 @@ public class TaskGroupService {
     }
 
     public TaskGroup deleteTaskGroupById(Long id) {
-        TaskGroup taskGroupToDelete = taskGroupRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(TaskGroup.class.getSimpleName(), id));
+        TaskGroup taskGroupToDelete = taskGroupRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException(TaskGroup.class.getSimpleName(), id));
 
         for (Task task : taskGroupToDelete.getTasks()) {
             taskService.deleteTaskById(task.getId());
@@ -39,7 +41,8 @@ public class TaskGroupService {
     }
 
     public TaskGroup updateTaskGroup(Long id, TaskGroup newTaskGroup) {
-        TaskGroup taskGroupToUpdate = taskGroupRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(TaskGroup.class.getSimpleName(), id));
+        TaskGroup taskGroupToUpdate = taskGroupRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException(TaskGroup.class.getSimpleName(), id));
 
         if (newTaskGroup.getName() != null) {
             taskGroupToUpdate.setName(newTaskGroup.getName());

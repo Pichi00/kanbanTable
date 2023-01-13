@@ -17,14 +17,6 @@ import java.util.List;
 @Component
 public class Mapper {
     public UserDTO toUserDTO(User user) {
-        List<Long> tablesId = Collections.emptyList();
-        if (user.getTables().size() > 0) {
-            tablesId = user.getTables()
-                    .stream()
-                    .map(Table::getId)
-                    .toList();
-        }
-
         List<Long> userTableRolesId = Collections.emptyList();
         if (user.getUserTableRoles().size() > 0) {
             userTableRolesId = user.getUserTableRoles()
@@ -33,7 +25,7 @@ public class Mapper {
                     .toList();
         }
 
-        return new UserDTO(user.getName(), user.getEmail(), tablesId, userTableRolesId);
+        return new UserDTO(user.getName(), user.getEmail(), userTableRolesId);
     }
 
     public User toUser(UserCreatorDTO userCreatorDTO) {
@@ -42,7 +34,6 @@ public class Mapper {
                 userCreatorDTO.getName(),
                 userCreatorDTO.getEmail(),
                 userCreatorDTO.getPassword(),
-                new ArrayList<>(),
                 new ArrayList<>()
         );
     }
@@ -67,11 +58,10 @@ public class Mapper {
         return new TableDTO(table.getName(), taskGroupsId, userTableRolesId);
     }
 
-    public Table toTable(TableCreatorDTO tableCreatorDTO, User owner) {
+    public Table toTable(TableCreatorDTO tableCreatorDTO) {
         return new Table(
                 null,
                 tableCreatorDTO.getName(),
-                owner,
                 new ArrayList<>(),
                 new ArrayList<>()
         );
