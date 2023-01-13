@@ -19,10 +19,12 @@ export const ScreenContainer = ({
   hasKeyobardDismisser = true,
   ...props
 }: Props) => {
-  const { theme } = useTheme();
-
   return hasKeyobardDismisser ? (
     <TouchableWithoutFeedback
+      style={{
+        flex: 1,
+        alignSelf: "stretch",
+      }}
       onPress={() => {
         Keyboard.dismiss();
       }}
