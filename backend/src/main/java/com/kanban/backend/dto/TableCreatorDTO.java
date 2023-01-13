@@ -1,10 +1,15 @@
 package com.kanban.backend.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 @Data
-@RequiredArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor
 public class TableCreatorDTO {
-    private final String name;
+    @JsonProperty("name")
+    private String name;
 }

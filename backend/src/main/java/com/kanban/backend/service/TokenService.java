@@ -36,6 +36,7 @@ public class TokenService {
                 .subject(authentication.getName())
                 .claim("scope", scope)
                 .claim("id", user.getId())
+                .claim("Important resources", "https://www.youtube.com/watch?v=dQw4w9WgXcQ")
                 .build();
 
         return this.jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
