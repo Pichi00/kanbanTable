@@ -10,7 +10,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,12 +23,16 @@ import static org.mockito.Mockito.verify;
 class UserServiceTest {
     @Mock
     private UserRepository userRepository;
+    @Mock
+    private TableService tableService;
+    @Mock
+    private PasswordEncoder passwordEncoder;
 
     private UserService subject;
 
     @BeforeEach
-    void setUp(){
-        this.subject = new UserService(this.userRepository);
+    void setUp() {
+        this.subject = new UserService(this.userRepository, this.tableService, this.passwordEncoder);
     }
 
     @Test
@@ -55,18 +61,22 @@ class UserServiceTest {
     @Test
     void shouldAddUser() {
         //given
-        final User givenInput = new User("YOWfbtD7reL67l","9tgVKZXW6@visit.com", "DRgRNzgI", List.of(new Table()));
+        String userPassword = "07g7I6il8a";
+        String userEncodedPassword = "9FEw3F1yMfIWa";
 
+        final User userToAdd = new User("YOWfbtD7reL67l", "9tgVKZXW6@visit.com", userPassword, Collections.emptyList());
+        given(this.userRepository.save(userToAdd)).willReturn(userToAdd);
+        given(this.passwordEncoder.encode(userToAdd.getPassword())).willReturn(userEncodedPassword);
 
         //when
-        this.subject.addUser(givenInput);
+        final User expectedOutput = this.subject.addUser(userToAdd);
 
         //then
         final ArgumentCaptor<User> userArgumentCaptor = ArgumentCaptor.forClass(User.class);
         verify(this.userRepository).save(userArgumentCaptor.capture());
         final User capturedUser = userArgumentCaptor.getValue();
 
-        AssertionsForClassTypes.assertThat(capturedUser).isEqualTo(givenInput);
+        AssertionsForClassTypes.assertThat(capturedUser).isEqualTo(expectedOutput);
     }
 
 
@@ -74,12 +84,13 @@ class UserServiceTest {
     void shouldDeleteUser() {
         //given
         final Long id = 1L;
-        given(this.userRepository.existsById(id)).willReturn(true);
+        final User userToDelete = new User(id, "33urZ75S", "FIgU78r@dHflsj.com", "ZdNH33", Collections.emptyList());
+        given(this.userRepository.findById(id)).willReturn(Optional.of(userToDelete));
 
         //when
         this.subject.deleteUserById(id);
 
         //then
-        verify(this.userRepository).deleteById(id);
+        verify(this.userRepository).delete(userToDelete);
     }
 }

@@ -15,12 +15,13 @@ import java.util.regex.Pattern;
 
 @Service
 @RequiredArgsConstructor
+
 public class UserService {
     private final UserRepository userRepository;
     private final TableService tableService;
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     public List<User> getAllUsers() {
         return userRepository.findAll();
