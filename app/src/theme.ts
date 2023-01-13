@@ -9,6 +9,8 @@ export const theme = {
     surfaceLight: "#B39999",
 
     text: "#000",
+
+    accent: "#F31212",
   },
   spacing: {
     $1: 2,
