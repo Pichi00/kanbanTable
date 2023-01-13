@@ -24,6 +24,7 @@ type InputIcon = {
 type Props = ComponentProps<typeof TextInput> & {
   prefix?: InputIcon;
   suffix?: InputIcon;
+  shadowColor?: string;
 };
 
 export const Input = ({
@@ -32,6 +33,7 @@ export const Input = ({
   placeholder,
   suffix,
   onChangeText,
+  shadowColor,
   ...props
 }: Props) => {
   const { theme } = useTheme();
@@ -61,8 +63,11 @@ export const Input = ({
         },
       ],
       fontSize: withTiming(isFocusedOrNotEmpty ? 12 : theme.fontSizes.body),
+      color: isFocusedOrNotEmpty
+        ? shadowColor ?? theme.colors.text
+        : theme.colors.text,
     };
-  }, [value]);
+  }, [value, shadowColor]);
 
   return (
     <TouchableWithoutFeedback onPress={focus}>
@@ -74,7 +79,7 @@ export const Input = ({
         <View
           style={{
             ...StyleSheet.absoluteFillObject,
-            backgroundColor: theme.colors.text,
+            backgroundColor: shadowColor ?? theme.colors.text,
             borderRadius: theme.radii.$3,
             zIndex: -1,
             transform: [

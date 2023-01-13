@@ -6,6 +6,7 @@ import { useTheme } from "../../../theme";
 import MDIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { IconButton } from "../../../components/IconButton";
 import { useState } from "react";
+import { SignInForm } from "./SignInForm";
 
 type Props = NativeStackScreenProps<
   RootStackParamList,
@@ -28,7 +29,7 @@ export const SignInScreen = ({ navigation, route }: Props) => {
           alignItems: "center",
         }}
       >
-        <Text
+        {/* <Text
           style={{
             color: theme.colors.text,
             fontSize: theme.fontSizes.title,
@@ -61,7 +62,8 @@ export const SignInScreen = ({ navigation, route }: Props) => {
         <Spacer spacing={theme.spacing.$4} />
         <IconButton onPress={() => {}} icon="login">
           Log In
-        </IconButton>
+        </IconButton> */}
+        <SignInForm onSubmit={() => {}} />
         <Text
           style={{
             color: theme.colors.surface,
