@@ -4,6 +4,8 @@ import com.kanban.backend.model.Table;
 import com.kanban.backend.model.TaskGroup;
 import com.kanban.backend.model.User;
 import com.kanban.backend.repository.TableRepository;
+import com.kanban.backend.repository.TaskGroupRepository;
+import com.kanban.backend.repository.TaskRepository;
 import org.assertj.core.api.AssertionsForClassTypes;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,11 +14,12 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static org.mockito.Mockito.verify;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class TableServiceTest {
@@ -24,11 +27,18 @@ class TableServiceTest {
     @Mock
     private TableRepository tableRepository;
 
+    @Mock
+    private TaskGroupRepository taskGroupRepository;
+
+    @Mock
+    private TaskRepository taskRepository;
+
     private TableService subject;
 
     @BeforeEach
-    void setUp(){
-        this.subject = new TableService(this.tableRepository);
+    void setUp() {
+        TaskGroupService taskGroupService = new TaskGroupService(this.taskGroupRepository, new TaskService(this.taskRepository));
+        this.subject = new TableService(this.tableRepository, taskGroupService);
     }
 
     @Test
@@ -43,8 +53,8 @@ class TableServiceTest {
     @Test
     void shouldGetTableById() {
         //given
-        final Long id = 1L;
-        final Table returnedOutput = new Table(1L, "9NSTM",new User(), List.of(new TaskGroup()));
+        final Long id = 24L;
+        final Table returnedOutput = new Table(id, "9NSTM", new User(), List.of(new TaskGroup()));
         given(this.tableRepository.findById(id)).willReturn(Optional.of(returnedOutput));
 
         //when
@@ -59,7 +69,7 @@ class TableServiceTest {
         //given
         final User user = new User();
         final List<TaskGroup> taskGroups = List.of(new TaskGroup());
-        final Table givenInput = new Table("XkRUHwn7", user,taskGroups);
+        final Table givenInput = new Table("XkRUHwn7", user, taskGroups);
 
         //when
         this.subject.addTable(givenInput);
@@ -76,12 +86,14 @@ class TableServiceTest {
     @Test
     void shouldDeleteTableById() {
         //given
-        final Long id = 1L;
+        final Long id = 10L;
+        final Table table = new Table(id, "59R4Ohw", new User(), Collections.emptyList());
+        given(tableRepository.findById(id)).willReturn(Optional.of(table));
 
         //when
         this.subject.deleteTableById(id);
 
         //then
-        verify(this.tableRepository).deleteById(id);
+        verify(this.tableRepository).delete(table);
     }
 }
