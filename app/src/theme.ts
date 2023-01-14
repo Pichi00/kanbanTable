@@ -3,7 +3,7 @@ import { createTheme } from "./context/theme/themeFactory";
 
 export const theme = {
   colors: {
-    background: "#F2EBEC",
+    background: "#FFF5F6",
     surface: "#4B3030",
     surfaceDark: "#0C0606",
     surfaceLight: "#B39999",
