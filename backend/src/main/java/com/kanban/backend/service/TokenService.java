@@ -32,11 +32,12 @@ public class TokenService {
                 .builder()
                 .issuer("self")
                 .issuedAt(now)
-                .expiresAt(now.plus(1, ChronoUnit.HOURS))
+                .expiresAt(now.plus(1, ChronoUnit.DAYS))
                 .subject(authentication.getName())
                 .claim("scope", scope)
                 .claim("id", user.getId())
-                .claim("Important resources", "https://www.youtube.com/watch?v=dQw4w9WgXcQ")
+                .claim("name", user.getName())
+                .claim("Important resources", "https://www.youtube.com/watch?v=tl6u2NASUzU")
                 .build();
 
         return this.jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
