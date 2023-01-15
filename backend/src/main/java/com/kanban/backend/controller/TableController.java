@@ -116,6 +116,21 @@ public class TableController {
     @PutMapping("/tables/{id}")
     public ResponseEntity<TableDTO> updateTable(@PathVariable Long id,
                                              @RequestBody Table newTable) {
+        Authentication authentication = SecurityContextHolder
+                .getContext()
+                .getAuthentication();
+        Jwt jwt = (Jwt) authentication.getPrincipal();
+        Long userId = jwt.getClaim("id");
+        UserTableRole userTableRole = this.userTableRoleService.getUserTableRoleByUserIdAndTableId(userId, id);
+
+        if (userTableRole == null) {
+            return ResponseEntity.badRequest().body(null);
+        }
+
+        if (Objects.equals(userTableRole.getRole(), Role.USER.name())) {
+            return ResponseEntity.badRequest().body(null);
+        }
+
         TableDTO responseBody = this.mapper.toTableDTO(tableService.updateTable(id, newTable));
         return ResponseEntity.ok().body(responseBody);
     }
