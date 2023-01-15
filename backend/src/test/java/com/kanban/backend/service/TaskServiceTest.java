@@ -1,5 +1,6 @@
 package com.kanban.backend.service;
 
+import com.kanban.backend.exception.ResourceNotFoundException;
 import com.kanban.backend.model.Tag;
 import com.kanban.backend.model.Task;
 import com.kanban.backend.model.TaskGroup;
@@ -16,6 +17,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
@@ -83,5 +85,27 @@ class TaskServiceTest {
 
         //then
         verify(this.taskRepository).deleteById(id);
+    }
+
+    @Test
+    void shouldThrowNotFoundException() {
+        //given
+        final Long id = 13L;
+        final Task task = new Task(id, "iz16I", new TaskGroup(), Collections.emptyList());
+        String expectedMessage = "Could not find Task with id " + id.toString();
+        given(this.taskRepository.findById(id)).willThrow(new ResourceNotFoundException(Task.class.getSimpleName(), id));
+
+        //then
+        assertThatThrownBy(() -> this.subject.getTaskById(id))
+                .isInstanceOf(ResourceNotFoundException.class)
+                .hasMessageContaining(expectedMessage);
+
+        assertThatThrownBy(() -> this.subject.deleteTaskById(id))
+                .isInstanceOf(ResourceNotFoundException.class)
+                .hasMessageContaining(expectedMessage);
+
+        assertThatThrownBy(() -> this.subject.updateTask(id, task))
+                .isInstanceOf(ResourceNotFoundException.class)
+                .hasMessageContaining(expectedMessage);
     }
 }
