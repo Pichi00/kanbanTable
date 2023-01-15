@@ -3,11 +3,10 @@ package com.kanban.backend.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kanban.backend.config.SecurityConfig;
 import com.kanban.backend.mapper.Mapper;
-import com.kanban.backend.model.Tag;
+import com.kanban.backend.model.Task;
+import com.kanban.backend.model.TaskGroup;
 import com.kanban.backend.repository.UserRepository;
-import com.kanban.backend.service.TagService;
-import com.kanban.backend.service.TokenService;
-import com.kanban.backend.service.UserService;
+import com.kanban.backend.service.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.h2.H2ConsoleProperties;
@@ -25,11 +24,15 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest({TagController.class, AuthController.class})
+@WebMvcTest({TaskController.class, AuthController.class})
 @Import({SecurityConfig.class, TokenService.class})
-class TagControllerTest {
+class TaskControllerTest {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
+    @MockBean
+    private TaskService taskService;
+    @MockBean
+    private TaskGroupService taskGroupService;
     @MockBean
     private TagService tagService;
     @MockBean
@@ -46,82 +49,83 @@ class TagControllerTest {
     @Test
     void shouldReturnUnauthorizedGetAll() throws Exception {
         //then
-        this.mvc.perform(get("/tags")).andExpect(status().isUnauthorized());
+        this.mvc.perform(get("/tasks")).andExpect(status().isUnauthorized());
 
     }
 
     @Test
     @WithMockUser
-    void shouldGetAllTags() throws Exception {
+    void shouldGetAllTasks() throws Exception {
         //given
-        final List<Tag> tags = List.of(new Tag());
+        final List<Task> tasks = List.of(new Task());
 
         //when
-        when(this.tagService.getAllTags()).thenReturn(tags);
+        when(this.taskService.getAllTasks()).thenReturn(tasks);
 
         //then
-        this.mvc.perform(get("/tags"))
+        this.mvc.perform(get("/tasks"))
                 .andExpect(status().isOk());
     }
 
     @Test
     @WithMockUser
-    void shouldGetTagById() throws Exception {
+    void shouldGetTaskById() throws Exception {
         //given
-        final Long id = 30L;
-        final Tag tag = new Tag();
+        final Long id = 9L;
+        final Task task = new Task();
 
         //when
-        when(this.tagService.getTagById(id)).thenReturn(tag);
+        when(this.taskService.getTaskById(id)).thenReturn(task);
 
         //then
-        this.mvc.perform(get("/tags/30")).andExpect(status().isOk());
+        this.mvc.perform(get("/tasks/{id}", id)).andExpect(status().isOk());
     }
 
     @Test
     @WithMockUser
-    void shouldAddTag() throws Exception {
+    void shouldAddTask() throws Exception {
         //given
-        final Tag tag = new Tag("AL5KZm8ezRA6", Collections.emptyList());
+        final Task task = new Task("AL5KZm8ezRA6", new TaskGroup(), Collections.emptyList());
 
         //when
-        when(this.tagService.addTag(tag)).thenReturn(tag);
+        when(this.taskService.addTask(task)).thenReturn(task);
 
         //then
-        this.mvc.perform(post("/tags")
+        this.mvc.perform(post("/tasks")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(this.objectMapper.writeValueAsString(tag))).andExpect(status().isOk());
+                .content(this.objectMapper.writeValueAsString(task))).andExpect(status().isOk());
     }
 
     @Test
     @WithMockUser
-    void shouldDeleteTagById() throws Exception {
+    void shouldDeleteTaskById() throws Exception {
         //given
-        final Long id = 28L;
-        final Tag tag = new Tag(id, "4j2Po", Collections.emptyList());
+        final Long id = 24L;
+        final Task task = new Task("1POIUSz", new TaskGroup(), Collections.emptyList());
 
         //when
-        when(this.tagService.deleteTagById(id)).thenReturn(tag);
+        when(this.taskService.deleteTaskById(id)).thenReturn(task);
 
         //then
-        this.mvc.perform(delete("/tags/{id}", id)
+        this.mvc.perform(delete("/tasks/{id}", id)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(this.objectMapper.writeValueAsString(tag))).andExpect(status().isOk());
+                .content(this.objectMapper.writeValueAsString(task))).andExpect(status().isOk());
     }
 
     @Test
     @WithMockUser
-    void shouldUpdateTag() throws Exception {
+    void shouldUpdateTask() throws Exception {
         //given
         final Long id = 6L;
-        final Tag tag = new Tag(id, "NLvQ27cg1UpmxV", Collections.emptyList());
+        final Task task = new Task(id, "vd9d8Z8qeqFl", new TaskGroup(), Collections.emptyList());
 
         //when
-        when(this.tagService.updateTag(id, tag)).thenReturn(tag);
+        when(this.taskService.updateTask(id, task)).thenReturn(task);
 
         //then
-        this.mvc.perform(put("/tags/{id}", id)
+        this.mvc.perform(put("/tasks/{id}", id)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(this.objectMapper.writeValueAsString(tag))).andExpect(status().isOk());
+                .content(this.objectMapper.writeValueAsString(task))).andExpect(status().isOk());
     }
+
 }
