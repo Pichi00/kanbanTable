@@ -1,22 +1,9 @@
-import { useCallback, useState } from "react";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import {
-  Image,
-  StyleSheet,
-  Text,
-  useWindowDimensions,
-  View,
-} from "react-native";
+import { Image, Text, useWindowDimensions, View } from "react-native";
 import { Button } from "../../../components/Button";
 import { ScreenContainer } from "../../../components/ScreenContainer";
 import { useTheme } from "../../../theme";
-import { RegisterSheet } from "./RegisterSheet";
-import {
-  AppRoutes,
-  RootStackParamList,
-  RootStackRoutes,
-} from "../../../navigation/types";
-import { BottomSheet } from "../../../components";
+import { RootStackParamList, RootStackRoutes } from "../../../navigation/types";
 import { moderateScale } from "../../../utils/scaling";
 
 const HERO_IMAGE = require("../../../../assets/images/hero.png");
@@ -27,8 +14,7 @@ type Props = NativeStackScreenProps<
 >;
 
 export const LandingScreen = ({ navigation, route }: Props) => {
-  const [sheetVisible, setSheetVisible] = useState(false);
-  const { width, height } = useWindowDimensions();
+  const { width } = useWindowDimensions();
   const { theme } = useTheme();
 
   return (
@@ -116,20 +102,6 @@ export const LandingScreen = ({ navigation, route }: Props) => {
           >
             Sign In
           </Text>
-        </Text>
-        <Text
-          onPress={() => {
-            navigation.navigate(RootStackRoutes.App, {
-              screen: AppRoutes.Table,
-            });
-          }}
-          style={{
-            color: theme.colors.surface,
-            fontSize: theme.fontSizes.body,
-            marginTop: theme.spacing.$4,
-          }}
-        >
-          Table screen
         </Text>
       </View>
     </ScreenContainer>

@@ -55,3 +55,5 @@ export const SignInForm = ({ onSubmit }: Props) => {
     />
   );
 };
+
+export type { SchemaType as SignInSchemaType };
