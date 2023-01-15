@@ -25,6 +25,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequiredArgsConstructor
@@ -92,6 +93,21 @@ public class TableController {
 
     @DeleteMapping("/tables/{id}")
     public ResponseEntity<TableDTO> deleteTableById(@PathVariable Long id) {
+        Authentication authentication = SecurityContextHolder
+                .getContext()
+                .getAuthentication();
+        Jwt jwt = (Jwt) authentication.getPrincipal();
+        Long userId = jwt.getClaim("id");
+        UserTableRole userTableRole = this.userTableRoleService.getUserTableRoleByUserIdAndTableId(userId, id);
+
+        if (userTableRole == null) {
+            return ResponseEntity.badRequest().body(null);
+        }
+
+        if (!Objects.equals(userTableRole.getRole(), Role.OWNER.name())) {
+            return ResponseEntity.badRequest().body(null);
+        }
+
         TableDTO responseBody = this.mapper.toTableDTO(tableService.deleteTableById(id));
 
         return ResponseEntity.ok().body(responseBody);
@@ -110,8 +126,22 @@ public class TableController {
                                                       @PathVariable Role role) {
         Table table = tableService.getTableById(tableId);
         User user = userService.getUserById(userId);
+        UserTableRole userTableRole = new UserTableRole(null, role.name(), user, table);
+        List<UserTableRole> userTableRoles = this.userTableRoleService.getAllUserTableRoles();
 
-        this.userTableRoleService.addUserTableRole(new UserTableRole(null, role.name(), user, table));
+        for (UserTableRole utr: userTableRoles) {
+            if (Objects.equals(utr.getUser().getId(), userId)) {
+                return ResponseEntity.badRequest().body(null);
+            }
+
+            if (role == Role.OWNER) {
+                if (role.name().equals(utr.getRole())) {
+                    return ResponseEntity.badRequest().body(null);
+                }
+            }
+        }
+
+        this.userTableRoleService.addUserTableRole(userTableRole);
 
         TableDTO responseBody = this.mapper.toTableDTO(table);
 
