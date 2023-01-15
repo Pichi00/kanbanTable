@@ -19,13 +19,10 @@ public class Table {
     private String name;
 
     // Relations
-    @ManyToOne
-    @JoinColumn(name = "owner_id")
-    @NonNull
-    @JsonIgnore
-    private User owner;
-
-    @OneToMany(mappedBy = "table", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "table")
     @NonNull
     private List<TaskGroup> taskGroups;
+    @OneToMany(mappedBy = "table")
+    @NonNull
+    private List<UserTableRole> userTableRoles;
 }

@@ -7,8 +7,8 @@ import java.util.List;
 
 @Data
 @RequiredArgsConstructor
-public class UserDTO {
+public class TableDTO {
     private final String name;
-    private final String email;
+    private final List<Long> taskGroupsId;
     private final List<Long> userTableRolesId;
 }

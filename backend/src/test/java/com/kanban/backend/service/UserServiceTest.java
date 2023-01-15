@@ -1,6 +1,5 @@
 package com.kanban.backend.service;
 
-import com.kanban.backend.model.Table;
 import com.kanban.backend.model.User;
 import com.kanban.backend.repository.UserRepository;
 import org.assertj.core.api.AssertionsForClassTypes;
@@ -13,7 +12,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.BDDMockito.given;
@@ -26,13 +24,15 @@ class UserServiceTest {
     @Mock
     private TableService tableService;
     @Mock
+    private UserTableRoleService userTableRoleService;
+    @Mock
     private PasswordEncoder passwordEncoder;
 
     private UserService subject;
 
     @BeforeEach
     void setUp() {
-        this.subject = new UserService(this.userRepository, this.tableService, this.passwordEncoder);
+        this.subject = new UserService(this.userRepository, this.tableService, this.userTableRoleService, this.passwordEncoder);
     }
 
     @Test
@@ -48,7 +48,7 @@ class UserServiceTest {
     void shouldGetUserById() {
         //given
         final Long id = 1L;
-        final User returnedOutput = new User(1L, "1rKLDEh4UL", "hn2DnX8DK20@xdd.com", "73i37CS0EZTzV", List.of(new Table()));
+        final User returnedOutput = new User(1L, "1rKLDEh4UL", "hn2DnX8DK20@xdd.com", "73i37CS0EZTzV", Collections.emptyList());
         given(this.userRepository.findById(id)).willReturn(Optional.of(returnedOutput));
 
         //when

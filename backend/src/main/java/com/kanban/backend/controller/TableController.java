@@ -1,14 +1,23 @@
 package com.kanban.backend.controller;
 
+import com.kanban.backend.dto.TableCreatorDTO;
+import com.kanban.backend.dto.TableDTO;
+import com.kanban.backend.enums.Role;
 import com.kanban.backend.exception.ResourceNotFoundException;
 import com.kanban.backend.generator.PDFGenerator;
+import com.kanban.backend.mapper.Mapper;
 import com.kanban.backend.model.Table;
 import com.kanban.backend.model.User;
+import com.kanban.backend.model.UserTableRole;
 import com.kanban.backend.service.TableService;
 import com.kanban.backend.service.UserService;
+import com.kanban.backend.service.UserTableRoleService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -22,6 +31,8 @@ import java.util.List;
 public class TableController {
     private final TableService tableService;
     private final UserService userService;
+    private final UserTableRoleService userTableRoleService;
+    private final Mapper mapper;
 
     @GetMapping("/pdf/{id}")
     public void generatePDF(@PathVariable Long id, HttpServletResponse response) throws IOException {
@@ -46,50 +57,64 @@ public class TableController {
     }
 
     @GetMapping("/tables")
-    public ResponseEntity<List<Table>> getAllTables() {
-        List<Table> responseBody = tableService.getAllTables();
+    public ResponseEntity<List<TableDTO>> getAllTables() {
+        List<TableDTO> responseBody = tableService
+                .getAllTables()
+                .stream()
+                .map(this.mapper::toTableDTO)
+                .toList();
+
         return ResponseEntity.ok().body(responseBody);
     }
 
     @GetMapping("/tables/{id}")
-    public ResponseEntity<Table> getTableById(@PathVariable Long id) {
-        Table responseBody = tableService.getTableById(id);
+    public ResponseEntity<TableDTO> getTableById(@PathVariable Long id) {
+        TableDTO responseBody = this.mapper.toTableDTO(tableService.getTableById(id));
+
         return ResponseEntity.ok().body(responseBody);
     }
 
     @PostMapping("/tables")
-    public ResponseEntity<Table> addTable(@RequestBody Table table,
-                                          @RequestParam(defaultValue = "0") Long owner) {
+    public ResponseEntity<TableDTO> addTable(@RequestBody TableCreatorDTO tableCreatorDTO) {
+        Authentication authentication = SecurityContextHolder
+                .getContext()
+                .getAuthentication();
+        Jwt jwt = (Jwt) authentication.getPrincipal();
+        Long userId = jwt.getClaim("id");
+        User owner = this.userService.getUserById(userId);
+        Table table = this.mapper.toTable(tableCreatorDTO);
+        TableDTO responseBody = this.mapper.toTableDTO(this.tableService.addTable(table));
 
-        if (owner != 0) {
-            User ownerToAssign = userService.getUserById(owner);
-            table.setOwner(ownerToAssign);
-        }
+        this.userTableRoleService.addUserTableRole(new UserTableRole(null, Role.OWNER.name(), owner, table));
 
-        Table responseBody = tableService.addTable(table);
         return ResponseEntity.ok().body(responseBody);
     }
 
     @DeleteMapping("/tables/{id}")
-    public ResponseEntity<Table> deleteTableById(@PathVariable Long id) {
-        Table responseBody = tableService.deleteTableById(id);
+    public ResponseEntity<TableDTO> deleteTableById(@PathVariable Long id) {
+        TableDTO responseBody = this.mapper.toTableDTO(tableService.deleteTableById(id));
+
         return ResponseEntity.ok().body(responseBody);
     }
 
     @PutMapping("/tables/{id}")
-    public ResponseEntity<Table> updateTable(@PathVariable Long id,
+    public ResponseEntity<TableDTO> updateTable(@PathVariable Long id,
                                              @RequestBody Table newTable) {
-        Table responseBody = tableService.updateTable(id, newTable);
+        TableDTO responseBody = this.mapper.toTableDTO(tableService.updateTable(id, newTable));
         return ResponseEntity.ok().body(responseBody);
     }
 
-    @PutMapping("tables/{tableId}/users/{userId}")
-    public ResponseEntity<Table> assignOwnerToTable(@PathVariable Long tableId, @PathVariable Long userId) {
+    @PutMapping("tables/{tableId}/users/{userId}/roles/{role}")
+    public ResponseEntity<TableDTO> assignRoleToTable(@PathVariable Long tableId,
+                                                      @PathVariable Long userId,
+                                                      @PathVariable Role role) {
         Table table = tableService.getTableById(tableId);
-        User owner = userService.getUserById(userId);
+        User user = userService.getUserById(userId);
 
-        table.setOwner(owner);
-        Table responseBody = tableService.addTable(table);
+        this.userTableRoleService.addUserTableRole(new UserTableRole(null, role.name(), user, table));
+
+        TableDTO responseBody = this.mapper.toTableDTO(table);
+
         return ResponseEntity.ok().body(responseBody);
     }
 }

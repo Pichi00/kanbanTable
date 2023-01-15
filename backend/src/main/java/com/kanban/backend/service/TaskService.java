@@ -18,7 +18,8 @@ public class TaskService {
     }
 
     public Task getTaskById(Long id) {
-        return taskRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(Task.class.getSimpleName(), id));
+        return taskRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException(Task.class.getSimpleName(), id));
     }
 
     public Task addTask(Task task) {
@@ -26,7 +27,8 @@ public class TaskService {
     }
 
     public Task deleteTaskById(Long id) {
-        Task taskToDelete = taskRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(Task.class.getSimpleName(), id));
+        Task taskToDelete = taskRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException(Task.class.getSimpleName(), id));
         taskToDelete.clearTags();
         taskRepository.save(taskToDelete);
         taskRepository.deleteById(id);
@@ -34,7 +36,9 @@ public class TaskService {
     }
 
     public Task updateTask(Long id, Task newTask) {
-        Task taskToUpdate = taskRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(Task.class.getSimpleName(), id));
+        Task taskToUpdate = taskRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException(Task.class.getSimpleName(), id));
+
         if (newTask.getName() != null) {
             taskToUpdate.setName(newTask.getName());
         }

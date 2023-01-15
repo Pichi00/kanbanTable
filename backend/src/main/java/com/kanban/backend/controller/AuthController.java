@@ -1,6 +1,7 @@
 package com.kanban.backend.controller;
 
 import com.kanban.backend.dto.UserCreatorDTO;
+import com.kanban.backend.dto.UserDTO;
 import com.kanban.backend.mapper.Mapper;
 import com.kanban.backend.model.LoginRequest;
 import com.kanban.backend.model.User;
@@ -25,9 +26,9 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
 
     @PostMapping("/auth/register")
-    public ResponseEntity<User> register(@RequestBody UserCreatorDTO userCreatorDTO) {
+    public ResponseEntity<UserDTO> register(@RequestBody UserCreatorDTO userCreatorDTO) {
         User user = mapper.toUser(userCreatorDTO);
-        User userResponse = userService.addUser(user);
+        UserDTO userResponse = this.mapper.toUserDTO(userService.addUser(user));
 
         if (userResponse == null) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);

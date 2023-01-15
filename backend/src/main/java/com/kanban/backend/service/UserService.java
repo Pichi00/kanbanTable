@@ -1,9 +1,11 @@
 package com.kanban.backend.service;
 
 import com.kanban.backend.dto.UserCreatorDTO;
+import com.kanban.backend.enums.Role;
 import com.kanban.backend.exception.ResourceNotFoundException;
 import com.kanban.backend.model.Table;
 import com.kanban.backend.model.User;
+import com.kanban.backend.model.UserTableRole;
 import com.kanban.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Pattern;
 
 @Service
@@ -19,6 +22,7 @@ import java.util.regex.Pattern;
 public class UserService {
     private final UserRepository userRepository;
     private final TableService tableService;
+    private final UserTableRoleService userTableRoleService;
 
     @Autowired
     private final PasswordEncoder passwordEncoder;
@@ -28,7 +32,8 @@ public class UserService {
     }
 
     public User getUserById(Long id) {
-        return userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(User.class.getSimpleName(), id));
+        return userRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException(User.class.getSimpleName(), id));
     }
 
     public User addUser(User user) {
@@ -55,10 +60,17 @@ public class UserService {
     }
 
     public User deleteUserById(Long id) {
-        User userToDelete = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(User.class.getSimpleName(), id));
+        User userToDelete = userRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException(User.class.getSimpleName(), id));
 
-        for (Table table : userToDelete.getTables()) {
-            tableService.deleteTableById(table.getId());
+        for (UserTableRole userTableRole : userToDelete.getUserTableRoles()) {
+            this.userTableRoleService.deleteUserTableRoleById(userTableRole.getId());
+
+            Role role = Role.valueOf(userTableRole.getRole());
+
+            if (role == Role.OWNER) {
+                this.tableService.deleteTableById(userTableRole.getTable().getId());
+            }
         }
 
         userRepository.delete(userToDelete);
@@ -66,7 +78,8 @@ public class UserService {
     }
 
     public User updateUser(Long id, UserCreatorDTO newUserDTO) {
-        User userToUpdate = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(User.class.getSimpleName(), id));
+        User userToUpdate = userRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException(User.class.getSimpleName(), id));
 
         if (newUserDTO.getName() != null) {
             userToUpdate.setName(newUserDTO.getName());
