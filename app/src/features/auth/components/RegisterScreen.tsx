@@ -1,12 +1,10 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList, RootStackRoutes } from "../../../navigation/types";
 import { Text, View } from "react-native";
-import { Button, Input, ScreenContainer } from "../../../components";
+import { ScreenContainer } from "../../../components";
 import { useTheme } from "../../../theme";
-import MDIcons from "@expo/vector-icons/MaterialCommunityIcons";
-import { IconButton } from "../../../components/IconButton";
-import { useState } from "react";
-import { RegisterForm } from "./RegisterForm";
+import { RegisterForm, type RegisterSchemaType } from "./RegisterForm";
+import { AppAPI } from "../../../api";
 
 type Props = NativeStackScreenProps<
   RootStackParamList,
@@ -14,14 +12,26 @@ type Props = NativeStackScreenProps<
 >;
 
 export const RegisterScreen = ({ navigation, route }: Props) => {
-  const [passwordVisible, setPasswordVisible] = useState(false);
   const { theme } = useTheme();
+
+  const handleSubmit = async ({
+    email,
+    name,
+    password,
+  }: RegisterSchemaType) => {
+    try {
+      await AppAPI.auth.register({ email, name, password });
+      navigation.replace(RootStackRoutes.SignIn);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <ScreenContainer
       style={{
         backgroundColor: theme.colors.background,
-        paddingVertical: theme.spacing.$5,
+        paddingTop: 0,
       }}
       hasKeyobardDismisser
     >
@@ -41,11 +51,7 @@ export const RegisterScreen = ({ navigation, route }: Props) => {
         >
           Join Dzbanban
         </Text>
-        <RegisterForm
-          onSubmit={(data) => {
-            console.log(data);
-          }}
-        />
+        <RegisterForm onSubmit={handleSubmit} />
         <Text
           style={{
             color: theme.colors.surface,

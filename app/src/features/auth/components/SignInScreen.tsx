@@ -1,12 +1,11 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList, RootStackRoutes } from "../../../navigation/types";
 import { Text, View } from "react-native";
-import { Button, Input, ScreenContainer } from "../../../components";
+import { ScreenContainer } from "../../../components";
 import { useTheme } from "../../../theme";
-import MDIcons from "@expo/vector-icons/MaterialCommunityIcons";
-import { IconButton } from "../../../components/IconButton";
-import { useState } from "react";
-import { SignInForm } from "./SignInForm";
+import { SignInForm, type SignInSchemaType } from "./SignInForm";
+import { useAuth } from "../../../hooks/useAuth";
+import { AppAPI } from "../../../api";
 
 type Props = NativeStackScreenProps<
   RootStackParamList,
@@ -14,14 +13,27 @@ type Props = NativeStackScreenProps<
 >;
 
 export const SignInScreen = ({ navigation, route }: Props) => {
-  const [passwordVisible, setPasswordVisible] = useState(false);
+  const { setToken } = useAuth();
   const { theme } = useTheme();
+
+  const handleSubmit = async ({ email, password }: SignInSchemaType) => {
+    try {
+      const token = await AppAPI.auth.signInEmailAndPassword({
+        email,
+        password,
+      });
+      setToken(token);
+    } catch (error) {
+      // TODO: Handle error
+      console.error(error);
+    }
+  };
 
   return (
     <ScreenContainer
       style={{
         backgroundColor: theme.colors.background,
-        paddingVertical: theme.spacing.$5,
+        paddingTop: 0,
       }}
     >
       <View
@@ -29,7 +41,7 @@ export const SignInScreen = ({ navigation, route }: Props) => {
           alignItems: "center",
         }}
       >
-        {/* <Text
+        <Text
           style={{
             color: theme.colors.text,
             fontSize: theme.fontSizes.title,
@@ -40,30 +52,7 @@ export const SignInScreen = ({ navigation, route }: Props) => {
         >
           Login to Dzbanban
         </Text>
-        <Input
-          placeholder="Email Address"
-          autoComplete="email"
-          keyboardType="email-address"
-          autoCapitalize="none"
-          prefix={{ icon: "email" }}
-        />
-
-        <Spacer spacing={theme.spacing.$4} />
-        <Input
-          placeholder="Password"
-          autoComplete="password"
-          prefix={{ icon: "form-textbox-password" }}
-          suffix={{
-            icon: passwordVisible ? "eye" : "eye-off",
-            onPress: () => setPasswordVisible((prev) => !prev),
-          }}
-          secureTextEntry={!passwordVisible}
-        />
-        <Spacer spacing={theme.spacing.$4} />
-        <IconButton onPress={() => {}} icon="login">
-          Log In
-        </IconButton> */}
-        <SignInForm onSubmit={() => {}} />
+        <SignInForm onSubmit={handleSubmit} />
         <Text
           style={{
             color: theme.colors.surface,

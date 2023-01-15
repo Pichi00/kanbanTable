@@ -12,10 +12,12 @@ import { DrawerScreenProps } from "@react-navigation/drawer/lib/typescript/src/t
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { IconButton } from "../../../components/IconButton";
 import { ScrollView } from "react-native-gesture-handler";
+import { useAuth } from "../../../hooks/useAuth";
 
 type Props = DrawerScreenProps<AppParamList, typeof AppRoutes["Table"]>;
 
 export const TableScreen = ({ navigation }: Props) => {
+  const { user, logout } = useAuth();
   const { width } = useWindowDimensions();
   const { theme } = useTheme();
 
@@ -76,7 +78,7 @@ export const TableScreen = ({ navigation }: Props) => {
               alignSelf: "stretch",
               backgroundColor: "white",
               borderColor: theme.colors.text,
-              borderWidth: 3,
+              borderWidth: 2,
               borderRadius: theme.radii.$3,
               padding: theme.spacing.$5,
             }}
@@ -114,7 +116,7 @@ export const TableScreen = ({ navigation }: Props) => {
               alignSelf: "stretch",
               backgroundColor: "white",
               borderColor: theme.colors.text,
-              borderWidth: 3,
+              borderWidth: 2,
               borderRadius: theme.radii.$3,
               padding: theme.spacing.$5,
             }}
@@ -142,6 +144,14 @@ export const TableScreen = ({ navigation }: Props) => {
           />
         </View>
       </ScrollView>
+      <View
+        style={{
+          marginTop: theme.spacing.$5,
+        }}
+      />
+      <IconButton onPress={logout} icon="logout">
+        Logout
+      </IconButton>
     </ScreenContainer>
   );
 };

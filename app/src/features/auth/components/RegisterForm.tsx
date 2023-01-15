@@ -13,13 +13,15 @@ const RegisterSchema = z.object({
   password: z.string().min(6, "Password must be at least 6 characters"),
 });
 
+type SchemaType = z.infer<typeof RegisterSchema>;
+
 type Props = {
-  onSubmit: (data: z.infer<typeof RegisterSchema>) => void;
+  onSubmit: (data: SchemaType) => void;
 };
 
 export const RegisterForm = ({ onSubmit }: Props) => {
   const [passwordVisible, setPasswordVisible] = useState(false);
-  const form = useForm<z.infer<typeof RegisterSchema>>({
+  const form = useForm<SchemaType>({
     resolver: zodResolver(RegisterSchema),
     reValidateMode: "onSubmit",
   });
@@ -62,3 +64,5 @@ export const RegisterForm = ({ onSubmit }: Props) => {
     />
   );
 };
+
+export type { SchemaType as RegisterSchemaType };
