@@ -6,6 +6,7 @@ import com.kanban.backend.model.User;
 import com.kanban.backend.repository.TableRepository;
 import com.kanban.backend.repository.TaskGroupRepository;
 import com.kanban.backend.repository.TaskRepository;
+import com.kanban.backend.repository.UserTableRoleRepository;
 import org.assertj.core.api.AssertionsForClassTypes;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,12 +34,17 @@ class TableServiceTest {
     @Mock
     private TaskRepository taskRepository;
 
+    @Mock
+    private UserTableRoleRepository userTableRoleRepository;
+
+
     private TableService subject;
 
     @BeforeEach
     void setUp() {
         TaskGroupService taskGroupService = new TaskGroupService(this.taskGroupRepository, new TaskService(this.taskRepository));
-        this.subject = new TableService(this.tableRepository, taskGroupService);
+        UserTableRoleService userTableRoleService = new UserTableRoleService(this.userTableRoleRepository);
+        this.subject = new TableService(this.tableRepository, taskGroupService, userTableRoleService);
     }
 
     @Test
@@ -54,7 +60,7 @@ class TableServiceTest {
     void shouldGetTableById() {
         //given
         final Long id = 24L;
-        final Table returnedOutput = new Table(id, "9NSTM", new User(), List.of(new TaskGroup()));
+        final Table returnedOutput = new Table(id, "9NSTM", Collections.emptyList(), Collections.emptyList());
         given(this.tableRepository.findById(id)).willReturn(Optional.of(returnedOutput));
 
         //when
@@ -69,7 +75,7 @@ class TableServiceTest {
         //given
         final User user = new User();
         final List<TaskGroup> taskGroups = List.of(new TaskGroup());
-        final Table givenInput = new Table("XkRUHwn7", user, taskGroups);
+        final Table givenInput = new Table("XkRUHwn7", Collections.emptyList(), Collections.emptyList());
 
         //when
         this.subject.addTable(givenInput);
@@ -87,7 +93,7 @@ class TableServiceTest {
     void shouldDeleteTableById() {
         //given
         final Long id = 10L;
-        final Table table = new Table(id, "59R4Ohw", new User(), Collections.emptyList());
+        final Table table = new Table(id, "59R4Ohw", Collections.emptyList(), Collections.emptyList());
         given(tableRepository.findById(id)).willReturn(Optional.of(table));
 
         //when

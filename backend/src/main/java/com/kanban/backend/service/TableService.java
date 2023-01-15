@@ -3,6 +3,7 @@ package com.kanban.backend.service;
 import com.kanban.backend.exception.ResourceNotFoundException;
 import com.kanban.backend.model.Table;
 import com.kanban.backend.model.TaskGroup;
+import com.kanban.backend.model.UserTableRole;
 import com.kanban.backend.repository.TableRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ import java.util.List;
 public class TableService {
     private final TableRepository tableRepository;
     private final TaskGroupService taskGroupService;
+    private final UserTableRoleService userTableRoleService;
 
     public List<Table> getAllTables() {
         return tableRepository.findAll();
@@ -34,6 +36,10 @@ public class TableService {
 
         for (TaskGroup taskGroup : tableToDelete.getTaskGroups()) {
             taskGroupService.deleteTaskGroupById(taskGroup.getId());
+        }
+
+        for (UserTableRole role : tableToDelete.getUserTableRoles()) {
+            userTableRoleService.deleteUserTableRoleById(role.getId());
         }
 
         tableRepository.delete(tableToDelete);
