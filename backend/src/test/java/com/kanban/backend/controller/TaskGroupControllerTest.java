@@ -3,7 +3,7 @@ package com.kanban.backend.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kanban.backend.config.SecurityConfig;
 import com.kanban.backend.mapper.Mapper;
-import com.kanban.backend.model.Task;
+import com.kanban.backend.model.Table;
 import com.kanban.backend.model.TaskGroup;
 import com.kanban.backend.repository.UserRepository;
 import com.kanban.backend.service.*;
@@ -24,17 +24,17 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest({TaskController.class, AuthController.class})
+@WebMvcTest({TaskGroupController.class, AuthController.class})
 @Import({SecurityConfig.class, TokenService.class})
-class TaskControllerTest {
+class TaskGroupControllerTest {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
     @MockBean
     private TaskService taskService;
     @MockBean
-    private TaskGroupService taskGroupService;
+    private TableService tableService;
     @MockBean
-    private TagService tagService;
+    private TaskGroupService taskGroupService;
     @MockBean
     private UserService userService;
     @MockBean
@@ -49,82 +49,82 @@ class TaskControllerTest {
     @Test
     void shouldReturnUnauthorizedGetAll() throws Exception {
         //then
-        this.mvc.perform(get("/tasks")).andExpect(status().isUnauthorized());
+        this.mvc.perform(get("/taskgroups")).andExpect(status().isUnauthorized());
     }
 
     @Test
     @WithMockUser
-    void shouldGetAllTasks() throws Exception {
+    void shouldGetAllTaskGroups() throws Exception {
         //given
-        final List<Task> tasks = List.of(new Task());
+        final List<TaskGroup> taskGroups = List.of(new TaskGroup());
 
         //when
-        when(this.taskService.getAllTasks()).thenReturn(tasks);
+        when(this.taskGroupService.getAllTaskGroups()).thenReturn(taskGroups);
 
         //then
-        this.mvc.perform(get("/tasks"))
+        this.mvc.perform(get("/taskgroups"))
                 .andExpect(status().isOk());
     }
 
     @Test
     @WithMockUser
-    void shouldGetTaskById() throws Exception {
+    void shouldGetTaskGroupById() throws Exception {
         //given
-        final Long id = 9L;
-        final Task task = new Task();
+        final Long id = 21L;
+        final TaskGroup taskGroup = new TaskGroup();
 
         //when
-        when(this.taskService.getTaskById(id)).thenReturn(task);
+        when(this.taskGroupService.getTaskGroupById(id)).thenReturn(taskGroup);
 
         //then
-        this.mvc.perform(get("/tasks/{id}", id)).andExpect(status().isOk());
+        this.mvc.perform(get("/taskgroups/{id}", id)).andExpect(status().isOk());
     }
 
     @Test
     @WithMockUser
-    void shouldAddTask() throws Exception {
+    void shouldAddTaskGroup() throws Exception {
         //given
-        final Task task = new Task("AL5KZm8ezRA6", new TaskGroup(), Collections.emptyList());
+        final TaskGroup taskGroup = new TaskGroup("yg359YdVdX2n", new Table(), Collections.emptyList());
 
         //when
-        when(this.taskService.addTask(task)).thenReturn(task);
+        when(this.taskGroupService.addTaskGroup(taskGroup)).thenReturn(taskGroup);
 
         //then
-        this.mvc.perform(post("/tasks")
+        this.mvc.perform(post("/taskgroups")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(this.objectMapper.writeValueAsString(task))).andExpect(status().isOk());
+                .content(this.objectMapper.writeValueAsString(taskGroup))).andExpect(status().isOk());
     }
 
     @Test
     @WithMockUser
-    void shouldDeleteTaskById() throws Exception {
+    void shouldDeleteTaskGroupById() throws Exception {
         //given
-        final Long id = 24L;
-        final Task task = new Task("1POIUSz", new TaskGroup(), Collections.emptyList());
+        final Long id = 23L;
+        final TaskGroup taskGroup = new TaskGroup("Ub7hUjhPW71wP6", new Table(), Collections.emptyList());
 
         //when
-        when(this.taskService.deleteTaskById(id)).thenReturn(task);
+        when(this.taskGroupService.deleteTaskGroupById(id)).thenReturn(taskGroup);
 
         //then
-        this.mvc.perform(delete("/tasks/{id}", id)
+        this.mvc.perform(delete("/taskgroups/{id}", id)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(this.objectMapper.writeValueAsString(task))).andExpect(status().isOk());
+                .content(this.objectMapper.writeValueAsString(taskGroup))).andExpect(status().isOk());
     }
 
     @Test
     @WithMockUser
     void shouldUpdateTask() throws Exception {
         //given
-        final Long id = 6L;
-        final Task task = new Task(id, "vd9d8Z8qeqFl", new TaskGroup(), Collections.emptyList());
+        final Long id = 12L;
+        final TaskGroup taskGroup = new TaskGroup(id, "8bBIa73U6", new Table(), Collections.emptyList());
 
         //when
-        when(this.taskService.updateTask(id, task)).thenReturn(task);
+        when(this.taskGroupService.updateTaskGroup(id, taskGroup)).thenReturn(taskGroup);
 
         //then
-        this.mvc.perform(put("/tasks/{id}", id)
+        this.mvc.perform(put("/taskgroups/{id}", id)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(this.objectMapper.writeValueAsString(task))).andExpect(status().isOk());
+                .content(this.objectMapper.writeValueAsString(taskGroup))).andExpect(status().isOk());
     }
 
 }
