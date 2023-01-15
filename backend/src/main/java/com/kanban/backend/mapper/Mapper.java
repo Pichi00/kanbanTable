@@ -55,7 +55,7 @@ public class Mapper {
                     .toList();
         }
 
-        return new TableDTO(table.getName(), taskGroupsId, userTableRolesId);
+        return new TableDTO(table.getId(), table.getName(), taskGroupsId, userTableRolesId);
     }
 
     public Table toTable(TableCreatorDTO tableCreatorDTO) {

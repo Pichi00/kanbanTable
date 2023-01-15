@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -15,6 +16,16 @@ public class UserTableRoleService {
 
     public List<UserTableRole> getAllUserTableRoles() {
         return this.userTableRoleRepository.findAll();
+    }
+
+    public UserTableRole getUserTableRoleByUserIdAndTableId(Long userId, Long tableId) {
+        return this.getAllUserTableRoles()
+                .stream()
+                .filter(utr ->
+                        Objects.equals(utr.getUser().getId(), userId) &&
+                        Objects.equals(utr.getTable().getId(), tableId))
+                .findFirst()
+                .orElse(null);
     }
 
     public UserTableRole getUserTableRoleById(Long id) {
