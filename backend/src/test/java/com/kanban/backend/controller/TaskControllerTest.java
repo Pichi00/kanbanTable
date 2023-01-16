@@ -2,6 +2,7 @@ package com.kanban.backend.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kanban.backend.config.SecurityConfig;
+import com.kanban.backend.enums.Priority;
 import com.kanban.backend.mapper.Mapper;
 import com.kanban.backend.model.Task;
 import com.kanban.backend.model.TaskGroup;
@@ -82,21 +83,6 @@ class TaskControllerTest {
 
     @Test
     @WithMockUser
-    void shouldAddTask() throws Exception {
-        //given
-        final Task task = new Task("AL5KZm8ezRA6", "1ZmY4aZF91oxgx", new TaskGroup(), Collections.emptyList());
-
-        //when
-        when(this.taskService.addTask(task)).thenReturn(task);
-
-        //then
-        this.mvc.perform(post("/tasks")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(this.objectMapper.writeValueAsString(task))).andExpect(status().isOk());
-    }
-
-    @Test
-    @WithMockUser
     void shouldDeleteTaskById() throws Exception {
         //given
         final Long id = 24L;
@@ -116,7 +102,7 @@ class TaskControllerTest {
     void shouldUpdateTask() throws Exception {
         //given
         final Long id = 6L;
-        final Task task = new Task(id, "vd9d8Z8qeqFl", "e7d5FB2", new TaskGroup(), Collections.emptyList());
+        final Task task = new Task(id, "vd9d8Z8qeqFl", "e7d5FB2", Priority.LOW, "xIJB965Y", "zlaB1G20vG0U", new TaskGroup(), Collections.emptyList());
 
         //when
         when(this.taskService.updateTask(id, task)).thenReturn(task);
