@@ -9,6 +9,7 @@ export const RootStackRoutes = {
 
 export const AppRoutes = {
   Table: "Table",
+  TableList: "TableList",
 } as const;
 
 export type RootStackParamList = {
@@ -19,5 +20,8 @@ export type RootStackParamList = {
 };
 
 export type AppParamList = {
-  [AppRoutes.Table]: undefined;
+  [AppRoutes.Table]: {
+    tableId: number;
+  };
+  [AppRoutes.TableList]: undefined;
 };

@@ -50,7 +50,7 @@ const ScreenContainerInner = ({
           alignSelf: "stretch",
           paddingTop: Platform.OS === "android" ? 50 : 0,
           paddingHorizontal: theme.spacing.$5,
-          paddingBottom: theme.spacing.$5,
+          paddingBottom: Platform.OS === "ios" ? 0 : theme.spacing.$5,
         },
         style,
       ]}

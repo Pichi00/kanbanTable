@@ -4,6 +4,8 @@ import {
   StyleSheet,
   useWindowDimensions,
   Platform,
+  TextInput,
+  ActivityIndicator,
 } from "react-native";
 import { ScreenContainer } from "../../../components";
 import { AppParamList, AppRoutes } from "../../../navigation/types";
@@ -13,21 +15,60 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { IconButton } from "../../../components/IconButton";
 import { ScrollView } from "react-native-gesture-handler";
 import { useAuth } from "../../../hooks/useAuth";
+import { AppAPI } from "../../../api";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { TaskGroup } from "./TaskGroup";
+import { NewTaskGroup } from "./NewTaskGroup";
+import { useRef, useCallback } from "react";
+import { useFocusEffect } from "@react-navigation/native";
 
 type Props = DrawerScreenProps<AppParamList, typeof AppRoutes["Table"]>;
 
-export const TableScreen = ({ navigation }: Props) => {
-  const { user, logout } = useAuth();
-  const { width } = useWindowDimensions();
+export const TableScreen = ({ navigation, route }: Props) => {
+  const inputRef = useRef<TextInput>();
   const { theme } = useTheme();
 
-  const CARD_WIDTH = width - 2 * theme.spacing.$5;
+  const { params } = route;
+  const { tableId } = params;
+
+  const tableQuery = useQuery(["table", tableId], () =>
+    AppAPI.app.getTable(tableId),
+  );
+
+  useFocusEffect(
+    useCallback(() => {
+      tableQuery.refetch();
+    }, [tableQuery]),
+  );
+
+  const updateTableNameMutation = useMutation({
+    mutationFn: (name: string) => AppAPI.app.updateTableName(tableId, name),
+  });
+
+  const addTaskGroupMutation = useMutation({
+    mutationFn: (tableId: number) => AppAPI.app.createTaskGroup(tableId),
+  });
+
+  const handleChangeName = async (name: string) => {
+    await updateTableNameMutation.mutateAsync(name === "" ? "Untitled" : name);
+    tableQuery.refetch();
+  };
+
+  const handleAddTaskGroup = async () => {
+    await addTaskGroupMutation.mutateAsync(tableId);
+    tableQuery.refetch();
+  };
+
+  if (tableQuery.isLoading) {
+    return <Text>Loading...</Text>;
+  }
 
   return (
     <ScreenContainer
       style={{
         backgroundColor: theme.colors.background,
         paddingTop: 0,
+        paddingBottom: 0,
       }}
       hasKeyobardDismisser={false}
     >
@@ -39,23 +80,47 @@ export const TableScreen = ({ navigation }: Props) => {
           marginBottom: theme.spacing.$5,
         }}
       >
-        <Text
+        <View
           style={{
-            fontSize: theme.fontSizes.subtitle,
-            color: theme.colors.surfaceLight,
+            flexDirection: "row",
+            alignItems: "center",
           }}
         >
-          Table{" "}
+          {updateTableNameMutation.isLoading && (
+            <ActivityIndicator
+              style={{
+                marginRight: theme.spacing.$3,
+              }}
+            />
+          )}
           <Text
             style={{
-              fontFamily: theme.fontFamily.title,
-              color: theme.colors.text,
+              fontSize: theme.fontSizes.subtitle,
+              color: theme.colors.surface,
             }}
           >
-            Dupa
+            Table{" "}
           </Text>
-        </Text>
-        <MaterialCommunityIcons name="table" size={24} color="black" />
+          <TextInput
+            ref={inputRef}
+            style={{
+              fontSize: theme.fontSizes.subtitle,
+              fontFamily: theme.fontFamily.title,
+              color: theme.colors.text,
+              flex: 1,
+            }}
+            placeholder="Table name"
+            placeholderTextColor={theme.colors.surfaceLight}
+            defaultValue={tableQuery.data?.name}
+            onEndEditing={(e) => handleChangeName(e.nativeEvent.text)}
+            editable={!updateTableNameMutation.isLoading}
+          />
+          <MaterialCommunityIcons
+            name="dots-vertical"
+            size={24}
+            color="black"
+          />
+        </View>
       </View>
       <ScrollView
         horizontal
@@ -66,92 +131,20 @@ export const TableScreen = ({ navigation }: Props) => {
         }}
         showsHorizontalScrollIndicator={false}
       >
-        <View
-          style={{
-            width: CARD_WIDTH,
-            marginRight: theme.spacing.$5,
-          }}
-        >
-          <View
-            style={{
-              flex: 1,
-              alignSelf: "stretch",
-              backgroundColor: "white",
-              borderColor: theme.colors.text,
-              borderWidth: 2,
-              borderRadius: theme.radii.$3,
-              padding: theme.spacing.$5,
-            }}
-          >
-            <Text
-              style={{
-                fontFamily: theme.fontFamily.title,
-              }}
-            >
-              Do zrobienia
-            </Text>
-            <View style={{ marginTop: "auto" }} />
-            <IconButton onPress={() => {}} icon="plus" noShadow>
-              Add Task
-            </IconButton>
-          </View>
-          <View
-            style={{
-              ...StyleSheet.absoluteFillObject,
-              borderRadius: theme.radii.$4,
-              backgroundColor: theme.colors.text,
-              zIndex: -1,
-              transform: [{ translateY: theme.spacing.$3 }],
-            }}
+        {tableQuery.data?.taskGroups.map((taskGroup) => (
+          <TaskGroup
+            key={taskGroup.id}
+            taskGroup={taskGroup}
+            tableId={tableId}
           />
-        </View>
-        <View
-          style={{
-            width: CARD_WIDTH,
-          }}
-        >
-          <View
-            style={{
-              flex: 1,
-              alignSelf: "stretch",
-              backgroundColor: "white",
-              borderColor: theme.colors.text,
-              borderWidth: 2,
-              borderRadius: theme.radii.$3,
-              padding: theme.spacing.$5,
-            }}
-          >
-            <Text
-              style={{
-                fontFamily: theme.fontFamily.title,
-              }}
-            >
-              Do zrobienia
-            </Text>
-            <View style={{ marginTop: "auto" }} />
-            <IconButton onPress={() => {}} icon="plus" noShadow>
-              Add Task
-            </IconButton>
-          </View>
-          <View
-            style={{
-              ...StyleSheet.absoluteFillObject,
-              borderRadius: theme.radii.$4,
-              backgroundColor: theme.colors.text,
-              zIndex: -1,
-              transform: [{ translateY: theme.spacing.$3 }],
-            }}
-          />
-        </View>
+        ))}
+        <NewTaskGroup onPress={handleAddTaskGroup} />
       </ScrollView>
       <View
         style={{
           marginTop: theme.spacing.$5,
         }}
       />
-      <IconButton onPress={logout} icon="logout">
-        Logout
-      </IconButton>
     </ScreenContainer>
   );
 };
