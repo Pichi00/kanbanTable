@@ -1,7 +1,9 @@
 package com.kanban.backend.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import lombok.*;
 
 import java.util.List;
@@ -25,4 +27,7 @@ public class Table {
     @OneToMany(mappedBy = "table")
     @NonNull
     private List<UserTableRole> userTableRoles;
+    @OneToMany(mappedBy = "table")
+    @NonNull
+    private List<Tag> tags;
 }

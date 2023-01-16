@@ -49,13 +49,19 @@ public class Mapper {
                     .toList();
         }
 
-        return new TableDTO(table.getId(), table.getName(), taskGroups, userTableRolesId);
+        List<Tag> tags = Collections.emptyList();
+        if (table.getTags().size() > 0) {
+            tags = table.getTags();
+        }
+
+        return new TableDTO(table.getId(), table.getName(), taskGroups, userTableRolesId, tags);
     }
 
     public Table toTable(TableCreatorDTO tableCreatorDTO) {
         return new Table(
                 null,
                 tableCreatorDTO.getName(),
+                new ArrayList<>(),
                 new ArrayList<>(),
                 new ArrayList<>()
         );

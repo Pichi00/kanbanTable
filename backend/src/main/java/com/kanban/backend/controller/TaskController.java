@@ -3,22 +3,34 @@ package com.kanban.backend.controller;
 import com.kanban.backend.model.Tag;
 import com.kanban.backend.model.Task;
 import com.kanban.backend.model.TaskGroup;
+import com.kanban.backend.model.User;
 import com.kanban.backend.service.TagService;
 import com.kanban.backend.service.TaskGroupService;
 import com.kanban.backend.service.TaskService;
+import com.kanban.backend.service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @RestController
+@Slf4j
 @RequiredArgsConstructor
 public class TaskController {
     private final TaskService taskService;
     private final TaskGroupService taskGroupService;
     private final TagService tagService;
+
+    private final UserService userService;
 
     @GetMapping("/tasks")
     public ResponseEntity<List<Task>> getAllTasks() {
@@ -49,6 +61,21 @@ public class TaskController {
             }
             task.setTags(tagsToAssign);
         }
+
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        task.setCreatedDate(dateFormat.format(new Date()));
+
+        Authentication authentication = SecurityContextHolder
+                .getContext()
+                .getAuthentication();
+        Jwt jwt = (Jwt) authentication.getPrincipal();
+        Long userId = jwt.getClaim("id");
+        User currentUser = this.userService.getUserById(userId);
+        task.setCreatorUsername(currentUser.getName());
+
+        log.info(task.getName());
+        log.info(task.getCreatorUsername());
+
         Task responseBody = taskService.addTask(task);
         return ResponseEntity.ok(responseBody);
     }

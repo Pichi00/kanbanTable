@@ -1,5 +1,6 @@
 package com.kanban.backend.dto;
 
+import com.kanban.backend.model.Tag;
 import com.kanban.backend.model.TaskGroup;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -13,4 +14,5 @@ public class TableDTO {
     private final String name;
     private final List<TaskGroup> taskGroups;
     private final List<Long> userTableRolesId;
+    private final List<Tag> tags;
 }

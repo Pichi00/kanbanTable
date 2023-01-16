@@ -3,8 +3,10 @@ package com.kanban.backend.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kanban.backend.config.SecurityConfig;
 import com.kanban.backend.mapper.Mapper;
+import com.kanban.backend.model.Table;
 import com.kanban.backend.model.Tag;
 import com.kanban.backend.repository.UserRepository;
+import com.kanban.backend.service.TableService;
 import com.kanban.backend.service.TagService;
 import com.kanban.backend.service.TokenService;
 import com.kanban.backend.service.UserService;
@@ -32,6 +34,8 @@ class TagControllerTest {
     private final ObjectMapper objectMapper = new ObjectMapper();
     @MockBean
     private TagService tagService;
+    @MockBean
+    private TableService tableService;
     @MockBean
     private UserService userService;
     @MockBean
@@ -82,7 +86,7 @@ class TagControllerTest {
     @WithMockUser
     void shouldAddTag() throws Exception {
         //given
-        final Tag tag = new Tag("AL5KZm8ezRA6", Collections.emptyList());
+        final Tag tag = new Tag("AL5KZm8ezRA6", Collections.emptyList(), new Table());
 
         //when
         when(this.tagService.addTag(tag)).thenReturn(tag);
@@ -98,7 +102,7 @@ class TagControllerTest {
     void shouldDeleteTagById() throws Exception {
         //given
         final Long id = 28L;
-        final Tag tag = new Tag(id, "4j2Po", Collections.emptyList());
+        final Tag tag = new Tag(id, "4j2Po", Collections.emptyList(), new Table());
 
         //when
         when(this.tagService.deleteTagById(id)).thenReturn(tag);
@@ -114,7 +118,7 @@ class TagControllerTest {
     void shouldUpdateTag() throws Exception {
         //given
         final Long id = 6L;
-        final Tag tag = new Tag(id, "NLvQ27cg1UpmxV", Collections.emptyList());
+        final Tag tag = new Tag(id, "NLvQ27cg1UpmxV", Collections.emptyList(), new Table());
 
         //when
         when(this.tagService.updateTag(id, tag)).thenReturn(tag);

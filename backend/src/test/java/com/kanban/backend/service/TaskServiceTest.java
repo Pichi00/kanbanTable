@@ -1,5 +1,6 @@
 package com.kanban.backend.service;
 
+import com.kanban.backend.enums.Priority;
 import com.kanban.backend.exception.ResourceNotFoundException;
 import com.kanban.backend.model.Tag;
 import com.kanban.backend.model.Task;
@@ -47,7 +48,7 @@ class TaskServiceTest {
     void shouldGetTaskById() {
         //given
         final Long id = 1L;
-        final Task returnedOutput = new Task(id, "Cv27HKG0nJ", "jOfQU7owPo7L1yX", new TaskGroup(), List.of(new Tag()));
+        final Task returnedOutput = new Task(id, "Cv27HKG0nJ", "jOfQU7owPo7L1yX", Priority.LOW, "2y0my9", "e8OrvJ", new TaskGroup(), List.of(new Tag()));
         given(this.taskRepository.findById(id)).willReturn(Optional.of(returnedOutput));
 
         //when
@@ -77,7 +78,7 @@ class TaskServiceTest {
     void shouldDeleteTaskById() {
         //given
         final Long id = 1L;
-        final Task taskToDelete = new Task(id, "099D69QDQRpfPD", "V42mtf4NZmIUQLb", new TaskGroup(), Collections.emptyList());
+        final Task taskToDelete = new Task(id, "099D69QDQRpfPD", "V42mtf4NZmIUQLb", Priority.LOW, "3zYT7zM8", "e8OrvJ", new TaskGroup(), Collections.emptyList());
         given(this.taskRepository.findById(id)).willReturn(Optional.of(taskToDelete));
 
         //when
@@ -91,8 +92,8 @@ class TaskServiceTest {
     void shouldThrowNotFoundException() {
         //given
         final Long id = 13L;
-        final Task task = new Task(id, "68JG7Nr2d80M", "iz16I", new TaskGroup(), Collections.emptyList());
-        String expectedMessage = "Could not find Task with id " + id.toString();
+        final Task task = new Task(id, "68JG7Nr2d80M", "iz16I", Priority.LOW, "doah2", "e8OrvJ", new TaskGroup(), Collections.emptyList());
+        String expectedMessage = "Could not find Task with id " + id;
         given(this.taskRepository.findById(id)).willThrow(new ResourceNotFoundException(Task.class.getSimpleName(), id));
 
         //then
