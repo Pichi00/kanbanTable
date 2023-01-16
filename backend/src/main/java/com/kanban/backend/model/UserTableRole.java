@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.Objects;
+
 @Data
 @NoArgsConstructor
 @RequiredArgsConstructor

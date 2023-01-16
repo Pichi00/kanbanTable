@@ -6,9 +6,13 @@ import com.kanban.backend.model.TaskGroup;
 import com.kanban.backend.model.UserTableRole;
 import com.kanban.backend.repository.TableRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -18,7 +22,18 @@ public class TableService {
     private final UserTableRoleService userTableRoleService;
 
     public List<Table> getAllTables() {
-        return tableRepository.findAll();
+        Authentication authentication = SecurityContextHolder
+                .getContext()
+                .getAuthentication();
+        Jwt jwt = (Jwt) authentication.getPrincipal();
+        Long userId = jwt.getClaim("id");
+
+        return this.userTableRoleService
+                .getAllUserTableRoles()
+                .stream()
+                .filter(utr -> Objects.equals(utr.getUser().getId(), userId))
+                .map(UserTableRole::getTable)
+                .toList();
     }
 
     public Table getTableById(Long id) {

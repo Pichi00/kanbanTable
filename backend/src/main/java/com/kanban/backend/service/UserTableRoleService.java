@@ -43,4 +43,12 @@ public class UserTableRoleService {
 
         return userTableRoleToDelete;
     }
+
+    public UserTableRole updateUserTableRole(Long id, UserTableRole newUserTableRole) {
+        UserTableRole userTableRoleToUpdate = this.getUserTableRoleById(id);
+
+        userTableRoleToUpdate.setRole(newUserTableRole.getRole());
+
+        return this.addUserTableRole(userTableRoleToUpdate);
+    }
 }
