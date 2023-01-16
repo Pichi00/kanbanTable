@@ -1,5 +1,6 @@
 package com.kanban.backend.service;
 
+import com.kanban.backend.exception.ResourceNotFoundException;
 import com.kanban.backend.model.Tag;
 import com.kanban.backend.model.Task;
 import com.kanban.backend.repository.TagRepository;
@@ -16,6 +17,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
@@ -54,6 +56,28 @@ class TagServiceTest {
 
         //then
         verify(this.tagRepository).findById(id);
+    }
+
+    @Test
+    void shouldThrowNotFoundException() {
+        //given
+        final Long id = 8L;
+        final Tag tag = new Tag(id, "iz16I", Collections.emptyList());
+        String expectedMessage = "Could not find Tag with id " + id.toString();
+        given(this.tagRepository.findById(id)).willThrow(new ResourceNotFoundException(Tag.class.getSimpleName(), id));
+
+        //then
+        assertThatThrownBy(() -> this.subject.getTagById(id))
+                .isInstanceOf(ResourceNotFoundException.class)
+                .hasMessageContaining(expectedMessage);
+
+        assertThatThrownBy(() -> this.subject.deleteTagById(id))
+                .isInstanceOf(ResourceNotFoundException.class)
+                .hasMessageContaining(expectedMessage);
+
+        assertThatThrownBy(() -> this.subject.updateTag(id, tag))
+                .isInstanceOf(ResourceNotFoundException.class)
+                .hasMessageContaining(expectedMessage);
     }
 
     @Test

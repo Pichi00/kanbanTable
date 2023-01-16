@@ -1,5 +1,7 @@
 package com.kanban.backend.service;
 
+import com.kanban.backend.dto.UserCreatorDTO;
+import com.kanban.backend.exception.ResourceNotFoundException;
 import com.kanban.backend.model.User;
 import com.kanban.backend.repository.UserRepository;
 import org.assertj.core.api.AssertionsForClassTypes;
@@ -14,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.Collections;
 import java.util.Optional;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
@@ -92,5 +95,27 @@ class UserServiceTest {
 
         //then
         verify(this.userRepository).delete(userToDelete);
+    }
+
+    @Test
+    void shouldThrowNotFoundException() {
+        //given
+        final Long id = 14L;
+        final UserCreatorDTO user = new UserCreatorDTO("MZq3l5jarfvxv", "cqU5wwNl6oYdKo@jksDkgd.com", "9zfysgxcDf");
+        String expectedMessage = "Could not find User with id " + id.toString();
+        given(this.userRepository.findById(id)).willThrow(new ResourceNotFoundException(User.class.getSimpleName(), id));
+
+        //then
+        assertThatThrownBy(() -> this.subject.getUserById(id))
+                .isInstanceOf(ResourceNotFoundException.class)
+                .hasMessageContaining(expectedMessage);
+
+        assertThatThrownBy(() -> this.subject.deleteUserById(id))
+                .isInstanceOf(ResourceNotFoundException.class)
+                .hasMessageContaining(expectedMessage);
+
+        assertThatThrownBy(() -> this.subject.updateUser(id, user))
+                .isInstanceOf(ResourceNotFoundException.class)
+                .hasMessageContaining(expectedMessage);
     }
 }

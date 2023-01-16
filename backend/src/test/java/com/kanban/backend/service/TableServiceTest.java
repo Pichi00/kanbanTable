@@ -1,5 +1,6 @@
 package com.kanban.backend.service;
 
+import com.kanban.backend.exception.ResourceNotFoundException;
 import com.kanban.backend.model.Table;
 import com.kanban.backend.model.TaskGroup;
 import com.kanban.backend.model.User;
@@ -19,6 +20,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
@@ -101,5 +103,27 @@ class TableServiceTest {
 
         //then
         verify(this.tableRepository).delete(table);
+    }
+
+    @Test
+    void shouldThrowNotFoundException() {
+        //given
+        final Long id = 15L;
+        final Table table = new Table(id, "MZq3l5jarfvxv", Collections.emptyList(), Collections.emptyList());
+        String expectedMessage = "Could not find Table with id " + id.toString();
+        given(this.tableRepository.findById(id)).willThrow(new ResourceNotFoundException(Table.class.getSimpleName(), id));
+
+        //then
+        assertThatThrownBy(() -> this.subject.getTableById(id))
+                .isInstanceOf(ResourceNotFoundException.class)
+                .hasMessageContaining(expectedMessage);
+
+        assertThatThrownBy(() -> this.subject.deleteTableById(id))
+                .isInstanceOf(ResourceNotFoundException.class)
+                .hasMessageContaining(expectedMessage);
+
+        assertThatThrownBy(() -> this.subject.updateTable(id, table))
+                .isInstanceOf(ResourceNotFoundException.class)
+                .hasMessageContaining(expectedMessage);
     }
 }
