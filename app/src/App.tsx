@@ -33,6 +33,8 @@ const onAppStateChange = (status: AppStateStatus) => {
 
 SplashScreen.preventAutoHideAsync();
 
+const queryClient = new QueryClient();
+
 const App = () => {
   useOnlineManager();
 
@@ -58,20 +60,22 @@ const App = () => {
 
   return (
     <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
-      <AuthProvider>
-        <GestureHandlerRootView style={{ flex: 1 }}>
-          <ThemeProvider theme={theme} darkTheme={undefined} mode="light">
-            <PortalProvider>
-              <SafeAreaProvider>
-                <NavigationContainer>
-                  <RootStackNavigator />
-                </NavigationContainer>
-              </SafeAreaProvider>
-            </PortalProvider>
-            <StatusBar style="auto" />
-          </ThemeProvider>
-        </GestureHandlerRootView>
-      </AuthProvider>
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider>
+          <GestureHandlerRootView style={{ flex: 1 }}>
+            <ThemeProvider theme={theme} darkTheme={undefined} mode="light">
+              <PortalProvider>
+                <SafeAreaProvider>
+                  <NavigationContainer>
+                    <RootStackNavigator />
+                  </NavigationContainer>
+                </SafeAreaProvider>
+              </PortalProvider>
+              <StatusBar style="auto" />
+            </ThemeProvider>
+          </GestureHandlerRootView>
+        </AuthProvider>
+      </QueryClientProvider>
     </View>
   );
 };
