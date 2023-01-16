@@ -84,7 +84,7 @@ class TaskControllerTest {
     @WithMockUser
     void shouldAddTask() throws Exception {
         //given
-        final Task task = new Task("AL5KZm8ezRA6", new TaskGroup(), Collections.emptyList());
+        final Task task = new Task("AL5KZm8ezRA6", "1ZmY4aZF91oxgx", new TaskGroup(), Collections.emptyList());
 
         //when
         when(this.taskService.addTask(task)).thenReturn(task);
@@ -100,7 +100,7 @@ class TaskControllerTest {
     void shouldDeleteTaskById() throws Exception {
         //given
         final Long id = 24L;
-        final Task task = new Task("1POIUSz", new TaskGroup(), Collections.emptyList());
+        final Task task = new Task("1POIUSz", "d8aD48LDjv3R", new TaskGroup(), Collections.emptyList());
 
         //when
         when(this.taskService.deleteTaskById(id)).thenReturn(task);
@@ -116,7 +116,7 @@ class TaskControllerTest {
     void shouldUpdateTask() throws Exception {
         //given
         final Long id = 6L;
-        final Task task = new Task(id, "vd9d8Z8qeqFl", new TaskGroup(), Collections.emptyList());
+        final Task task = new Task(id, "vd9d8Z8qeqFl", "e7d5FB2", new TaskGroup(), Collections.emptyList());
 
         //when
         when(this.taskService.updateTask(id, task)).thenReturn(task);

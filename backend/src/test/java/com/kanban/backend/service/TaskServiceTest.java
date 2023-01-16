@@ -47,7 +47,7 @@ class TaskServiceTest {
     void shouldGetTaskById() {
         //given
         final Long id = 1L;
-        final Task returnedOutput = new Task(id, "Cv27HKG0nJ", new TaskGroup(), List.of(new Tag()));
+        final Task returnedOutput = new Task(id, "Cv27HKG0nJ", "jOfQU7owPo7L1yX", new TaskGroup(), List.of(new Tag()));
         given(this.taskRepository.findById(id)).willReturn(Optional.of(returnedOutput));
 
         //when
@@ -60,7 +60,7 @@ class TaskServiceTest {
     @Test
     void shouldAddTask() {
         //given
-        final Task givenInput = new Task("91XDt", new TaskGroup(), List.of(new Tag()));
+        final Task givenInput = new Task("91XDt", "a8MVHWOzrl0B1g", new TaskGroup(), List.of(new Tag()));
 
         //when
         this.subject.addTask(givenInput);
@@ -77,7 +77,7 @@ class TaskServiceTest {
     void shouldDeleteTaskById() {
         //given
         final Long id = 1L;
-        final Task taskToDelete = new Task(id, "V42mtf4NZmIUQLb", new TaskGroup(), Collections.emptyList());
+        final Task taskToDelete = new Task(id, "099D69QDQRpfPD", "V42mtf4NZmIUQLb", new TaskGroup(), Collections.emptyList());
         given(this.taskRepository.findById(id)).willReturn(Optional.of(taskToDelete));
 
         //when
@@ -91,7 +91,7 @@ class TaskServiceTest {
     void shouldThrowNotFoundException() {
         //given
         final Long id = 13L;
-        final Task task = new Task(id, "iz16I", new TaskGroup(), Collections.emptyList());
+        final Task task = new Task(id, "68JG7Nr2d80M", "iz16I", new TaskGroup(), Collections.emptyList());
         String expectedMessage = "Could not find Task with id " + id.toString();
         given(this.taskRepository.findById(id)).willThrow(new ResourceNotFoundException(Task.class.getSimpleName(), id));
 
