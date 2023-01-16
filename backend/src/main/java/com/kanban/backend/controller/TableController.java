@@ -145,14 +145,28 @@ public class TableController {
         List<UserTableRole> userTableRoles = this.userTableRoleService.getAllUserTableRoles();
 
         for (UserTableRole utr: userTableRoles) {
-            if (Objects.equals(utr.getUser().getId(), userId)) {
+            if (Objects.equals(utr.getRole(), userTableRole.getRole()) &&
+                    Objects.equals(utr.getUser().getId(), userTableRole.getUser().getId()) &&
+                    Objects.equals(utr.getTable().getId(), userTableRole.getTable().getId())) {
                 return ResponseEntity.badRequest().body(null);
             }
 
-            if (role == Role.OWNER) {
-                if (role.name().equals(utr.getRole())) {
+            if (Objects.equals(role.name(), Role.OWNER.name()) &&
+                    Objects.equals(utr.getRole(), userTableRole.getRole()) &&
+                    Objects.equals(utr.getTable().getId(), userTableRole.getTable().getId())) {
+                return ResponseEntity.badRequest().body(null);
+            }
+
+            if (Objects.equals(utr.getUser().getId(), userTableRole.getUser().getId()) &&
+                    Objects.equals(utr.getTable().getId(), userTableRole.getTable().getId())) {
+                if (utr.getRole().equals(Role.OWNER.name())) {
                     return ResponseEntity.badRequest().body(null);
                 }
+
+                this.userTableRoleService.updateUserTableRole(utr.getId(), userTableRole);
+                TableDTO responseBody = this.mapper.toTableDTO(table);
+
+                return ResponseEntity.ok().body(responseBody);
             }
         }
 
