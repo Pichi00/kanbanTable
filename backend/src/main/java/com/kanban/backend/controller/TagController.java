@@ -1,6 +1,8 @@
 package com.kanban.backend.controller;
 
+import com.kanban.backend.model.Table;
 import com.kanban.backend.model.Tag;
+import com.kanban.backend.service.TableService;
 import com.kanban.backend.service.TagService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +14,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TagController {
     private final TagService tagService;
+    private final TableService tableService;
 
     @GetMapping("/tags")
     public ResponseEntity<List<Tag>> getAllTags() {
@@ -26,7 +29,12 @@ public class TagController {
     }
 
     @PostMapping("/tags")
-    public ResponseEntity<Tag> addTag(@RequestBody Tag tag) {
+    public ResponseEntity<Tag> addTag(@RequestBody Tag tag,
+                                      @RequestParam(defaultValue = "0") Long table) {
+        if (table != 0) {
+            Table tableToAssign = tableService.getTableById(table);
+            tag.setTable(tableToAssign);
+        }
         Tag responseBody = tagService.addTag(tag);
         return ResponseEntity.ok().body(responseBody);
     }

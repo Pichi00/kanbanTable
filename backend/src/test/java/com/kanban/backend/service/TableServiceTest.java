@@ -4,10 +4,7 @@ import com.kanban.backend.exception.ResourceNotFoundException;
 import com.kanban.backend.model.Table;
 import com.kanban.backend.model.TaskGroup;
 import com.kanban.backend.model.User;
-import com.kanban.backend.repository.TableRepository;
-import com.kanban.backend.repository.TaskGroupRepository;
-import com.kanban.backend.repository.TaskRepository;
-import com.kanban.backend.repository.UserTableRoleRepository;
+import com.kanban.backend.repository.*;
 import org.assertj.core.api.AssertionsForClassTypes;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -37,6 +34,9 @@ class TableServiceTest {
     private TaskRepository taskRepository;
 
     @Mock
+    private TagRepository tagRepository;
+
+    @Mock
     private UserTableRoleRepository userTableRoleRepository;
 
     private TableService subject;
@@ -45,14 +45,15 @@ class TableServiceTest {
     void setUp() {
         TaskGroupService taskGroupService = new TaskGroupService(this.taskGroupRepository, new TaskService(this.taskRepository));
         UserTableRoleService userTableRoleService = new UserTableRoleService(this.userTableRoleRepository);
-        this.subject = new TableService(this.tableRepository, taskGroupService, userTableRoleService);
+        TagService tagService = new TagService(this.tagRepository, this.taskRepository);
+        this.subject = new TableService(this.tableRepository, taskGroupService, tagService, userTableRoleService);
     }
 
     @Test
     void shouldGetTableById() {
         //given
         final Long id = 24L;
-        final Table returnedOutput = new Table(id, "9NSTM", Collections.emptyList(), Collections.emptyList());
+        final Table returnedOutput = new Table(id, "9NSTM", Collections.emptyList(), Collections.emptyList(), Collections.emptyList());
         given(this.tableRepository.findById(id)).willReturn(Optional.of(returnedOutput));
 
         //when
@@ -67,7 +68,7 @@ class TableServiceTest {
         //given
         final User user = new User();
         final List<TaskGroup> taskGroups = List.of(new TaskGroup());
-        final Table givenInput = new Table("XkRUHwn7", Collections.emptyList(), Collections.emptyList());
+        final Table givenInput = new Table("XkRUHwn7", Collections.emptyList(), Collections.emptyList(), Collections.emptyList());
 
         //when
         this.subject.addTable(givenInput);
@@ -85,7 +86,7 @@ class TableServiceTest {
     void shouldDeleteTableById() {
         //given
         final Long id = 10L;
-        final Table table = new Table(id, "59R4Ohw", Collections.emptyList(), Collections.emptyList());
+        final Table table = new Table(id, "59R4Ohw", Collections.emptyList(), Collections.emptyList(), Collections.emptyList());
         given(tableRepository.findById(id)).willReturn(Optional.of(table));
 
         //when
@@ -99,7 +100,7 @@ class TableServiceTest {
     void shouldThrowNotFoundException() {
         //given
         final Long id = 15L;
-        final Table table = new Table(id, "MZq3l5jarfvxv", Collections.emptyList(), Collections.emptyList());
+        final Table table = new Table(id, "MZq3l5jarfvxv", Collections.emptyList(), Collections.emptyList(), Collections.emptyList());
         String expectedMessage = "Could not find Table with id " + id;
         given(this.tableRepository.findById(id)).willThrow(new ResourceNotFoundException(Table.class.getSimpleName(), id));
 
