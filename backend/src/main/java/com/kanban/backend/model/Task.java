@@ -1,6 +1,7 @@
 package com.kanban.backend.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.kanban.backend.enums.Priority;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -19,6 +20,12 @@ public class Task {
     private String name;
     @NonNull
     private String description;
+
+    private Priority priority = Priority.LOW;
+
+    private String createdDate;
+
+    private String creatorUsername;
 
     // Relations
     @ManyToOne

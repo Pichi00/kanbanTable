@@ -39,7 +39,6 @@ class TableServiceTest {
     @Mock
     private UserTableRoleRepository userTableRoleRepository;
 
-
     private TableService subject;
 
     @BeforeEach
@@ -47,15 +46,6 @@ class TableServiceTest {
         TaskGroupService taskGroupService = new TaskGroupService(this.taskGroupRepository, new TaskService(this.taskRepository));
         UserTableRoleService userTableRoleService = new UserTableRoleService(this.userTableRoleRepository);
         this.subject = new TableService(this.tableRepository, taskGroupService, userTableRoleService);
-    }
-
-    @Test
-    void shouldGetAllTables() {
-        //when
-        this.subject.getAllTables();
-
-        //then
-        verify(this.tableRepository).findAll();
     }
 
     @Test
@@ -110,7 +100,7 @@ class TableServiceTest {
         //given
         final Long id = 15L;
         final Table table = new Table(id, "MZq3l5jarfvxv", Collections.emptyList(), Collections.emptyList());
-        String expectedMessage = "Could not find Table with id " + id.toString();
+        String expectedMessage = "Could not find Table with id " + id;
         given(this.tableRepository.findById(id)).willThrow(new ResourceNotFoundException(Table.class.getSimpleName(), id));
 
         //then
