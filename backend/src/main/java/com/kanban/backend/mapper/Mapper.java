@@ -4,10 +4,7 @@ import com.kanban.backend.dto.TableCreatorDTO;
 import com.kanban.backend.dto.TableDTO;
 import com.kanban.backend.dto.UserCreatorDTO;
 import com.kanban.backend.dto.UserDTO;
-import com.kanban.backend.model.Table;
-import com.kanban.backend.model.TaskGroup;
-import com.kanban.backend.model.User;
-import com.kanban.backend.model.UserTableRole;
+import com.kanban.backend.model.*;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -39,12 +36,9 @@ public class Mapper {
     }
 
     public TableDTO toTableDTO(Table table) {
-        List<Long> taskGroupsId = Collections.emptyList();
+        List<TaskGroup> taskGroups = Collections.emptyList();
         if (table.getTaskGroups().size() > 0) {
-            taskGroupsId = table.getTaskGroups()
-                    .stream()
-                    .map(TaskGroup::getId)
-                    .toList();
+            taskGroups = table.getTaskGroups();
         }
 
         List<Long> userTableRolesId = Collections.emptyList();
@@ -55,7 +49,7 @@ public class Mapper {
                     .toList();
         }
 
-        return new TableDTO(table.getId(), table.getName(), taskGroupsId, userTableRolesId);
+        return new TableDTO(table.getId(), table.getName(), taskGroups, userTableRolesId);
     }
 
     public Table toTable(TableCreatorDTO tableCreatorDTO) {
