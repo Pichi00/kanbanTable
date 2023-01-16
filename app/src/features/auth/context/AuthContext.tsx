@@ -20,7 +20,7 @@ type AuthAction =
   | {
       type: "SIGN_IN";
       payload: {
-        token: string;
+        user: JwtUser;
       };
     }
   | {
@@ -32,7 +32,7 @@ const authReducer = (state: typeof initialState, action: AuthAction) => {
     case "SIGN_IN":
       return {
         ...state,
-        user: decodeUser(action.payload.token),
+        user: action.payload.user,
         isAuthenticated: true,
       };
     case "SIGN_OUT":
@@ -50,8 +50,14 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
   useEffect(() => {
     const getToken = async () => {
       const token = await SecureStore.getItemAsync("token");
+
       if (token) {
-        dispatch({ type: "SIGN_IN", payload: { token } });
+        const user = decodeUser(token);
+        if (user.expiringAt < Date.now())
+          dispatch({ type: "SIGN_IN", payload: { user } });
+      } else {
+        await SecureStore.deleteItemAsync("token");
+        dispatch({ type: "SIGN_OUT" });
       }
     };
 
@@ -60,7 +66,8 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
 
   const setToken = async (token: string) => {
     await SecureStore.setItemAsync("token", token);
-    dispatch({ type: "SIGN_IN", payload: { token } });
+    const user = decodeUser(token);
+    dispatch({ type: "SIGN_IN", payload: { user } });
   };
 
   const logout = async () => {

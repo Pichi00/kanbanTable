@@ -13,6 +13,7 @@ export type JwtUser = {
   id: string;
   email: string;
   name: string;
+  expiringAt: number;
 };
 
 export const decodeUser = (token: string): JwtUser => {
@@ -20,11 +21,12 @@ export const decodeUser = (token: string): JwtUser => {
 
   console.log(decoded);
 
-  const { id, sub, name } = decoded;
+  const { id, sub, name, exp } = decoded;
 
   return {
     id,
     email: sub,
     name,
+    expiringAt: exp,
   };
 };
