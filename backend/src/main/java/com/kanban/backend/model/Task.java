@@ -17,6 +17,8 @@ public class Task {
     private Long id;
     @NonNull
     private String name;
+    @NonNull
+    private String description;
 
     // Relations
     @ManyToOne
