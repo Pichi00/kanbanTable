@@ -17,6 +17,8 @@ public class Tag {
     private Long id;
     @NonNull
     private String name;
+    @NonNull
+    private String color;
 
     // Relations
     @ManyToMany(mappedBy = "tags")
