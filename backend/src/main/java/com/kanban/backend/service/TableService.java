@@ -2,6 +2,7 @@ package com.kanban.backend.service;
 
 import com.kanban.backend.exception.ResourceNotFoundException;
 import com.kanban.backend.model.Table;
+import com.kanban.backend.model.Tag;
 import com.kanban.backend.model.TaskGroup;
 import com.kanban.backend.model.UserTableRole;
 import com.kanban.backend.repository.TableRepository;
@@ -19,6 +20,7 @@ import java.util.Objects;
 public class TableService {
     private final TableRepository tableRepository;
     private final TaskGroupService taskGroupService;
+    private final TagService tagService;
     private final UserTableRoleService userTableRoleService;
 
     public List<Table> getAllTables() {
@@ -55,6 +57,10 @@ public class TableService {
 
         for (UserTableRole role : tableToDelete.getUserTableRoles()) {
             userTableRoleService.deleteUserTableRoleById(role.getId());
+        }
+
+        for (Tag tag : tableToDelete.getTags()) {
+            tagService.deleteTagById(tag.getId());
         }
 
         tableRepository.delete(tableToDelete);

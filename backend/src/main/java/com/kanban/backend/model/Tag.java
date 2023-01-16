@@ -24,7 +24,10 @@ public class Tag {
     @JsonIgnore
     private List<Task> tasks;
 
-    public void clearTasks() {
-        tasks.clear();
-    }
+    @ManyToOne
+    @JoinColumn(name = "table_id")
+    @NonNull
+    @JsonIgnore
+    private Table table;
+
 }
