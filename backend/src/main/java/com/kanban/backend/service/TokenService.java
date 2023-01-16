@@ -1,7 +1,6 @@
 package com.kanban.backend.service;
 
 import com.kanban.backend.config.UserCustomDetails;
-import com.kanban.backend.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
