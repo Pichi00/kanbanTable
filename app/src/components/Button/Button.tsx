@@ -52,7 +52,7 @@ export const Button = ({
             borderRadius: theme.radii.$3,
             borderWidth: 2,
             borderColor: theme.colors.text,
-            backgroundColor: "#f31212",
+            backgroundColor: theme.colors.accent,
             zIndex: 1,
           },
           style,

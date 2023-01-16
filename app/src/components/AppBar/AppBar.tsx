@@ -1,10 +1,12 @@
-import { View, Text, SafeAreaView, TouchableOpacity } from "react-native";
+import { View, Text, Pressable, TouchableOpacity } from "react-native";
 import { type DrawerHeaderProps } from "@react-navigation/drawer";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useTheme } from "../../theme";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useAuth } from "../../hooks/useAuth";
 
 export const AppBar = ({ navigation, layout }: DrawerHeaderProps) => {
+  const { logout } = useAuth();
   const insets = useSafeAreaInsets();
   const { theme } = useTheme();
 
@@ -36,13 +38,14 @@ export const AppBar = ({ navigation, layout }: DrawerHeaderProps) => {
       >
         Dzbanban
       </Text>
-      <View
+      <Pressable
         style={{
           width: 24,
           height: 24,
           backgroundColor: theme.colors.surface,
           borderRadius: 12,
         }}
+        onPress={logout}
       />
     </View>
   );

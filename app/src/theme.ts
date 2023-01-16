@@ -6,11 +6,11 @@ export const theme = {
     background: "#FFF5F6",
     surface: "#4B3030",
     surfaceDark: "#0C0606",
-    surfaceLight: "#B39999",
+    surfaceLight: "#F5EBE0",
 
     text: "#000",
 
-    accent: "#F31212",
+    accent: "#f31212",
   },
   spacing: {
     $1: 2,
@@ -35,6 +35,7 @@ export const theme = {
     title: 32,
     subtitle: 20,
     body: 16,
+    bodySmall: 12,
     button: 16,
   },
   fontFamily: {
