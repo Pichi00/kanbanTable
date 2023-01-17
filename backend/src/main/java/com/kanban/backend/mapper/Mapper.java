@@ -1,9 +1,6 @@
 package com.kanban.backend.mapper;
 
-import com.kanban.backend.dto.TableCreatorDTO;
-import com.kanban.backend.dto.TableDTO;
-import com.kanban.backend.dto.UserCreatorDTO;
-import com.kanban.backend.dto.UserDTO;
+import com.kanban.backend.dto.*;
 import com.kanban.backend.model.*;
 import org.springframework.stereotype.Component;
 
@@ -41,11 +38,11 @@ public class Mapper {
             taskGroups = table.getTaskGroups();
         }
 
-        List<Long> userTableRolesId = Collections.emptyList();
+        List<UserTableRoleDTO> userTableRoles = Collections.emptyList();
         if (table.getUserTableRoles().size() > 0) {
-            userTableRolesId = table.getUserTableRoles()
+            userTableRoles = table.getUserTableRoles()
                     .stream()
-                    .map(UserTableRole::getId)
+                    .map(this::toUserTableRoleDTO)
                     .toList();
         }
 
@@ -54,7 +51,7 @@ public class Mapper {
             tags = table.getTags();
         }
 
-        return new TableDTO(table.getId(), table.getName(), taskGroups, userTableRolesId, tags);
+        return new TableDTO(table.getId(), table.getName(), taskGroups, userTableRoles, tags);
     }
 
     public Table toTable(TableCreatorDTO tableCreatorDTO) {
@@ -64,6 +61,15 @@ public class Mapper {
                 new ArrayList<>(),
                 new ArrayList<>(),
                 new ArrayList<>()
+        );
+    }
+
+    public UserTableRoleDTO toUserTableRoleDTO(UserTableRole userTableRole) {
+        return new UserTableRoleDTO(
+                userTableRole.getId(),
+                userTableRole.getRole(),
+                userTableRole.getUser().getId(),
+                userTableRole.getTable().getId()
         );
     }
 }

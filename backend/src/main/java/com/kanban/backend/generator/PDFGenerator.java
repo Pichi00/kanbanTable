@@ -32,6 +32,7 @@ public class PDFGenerator {
 
         Paragraph title = new Paragraph(table.getName(), fontTitle);
         title.setAlignment(Paragraph.ALIGN_CENTER);
+        title.setSpacingAfter(50f);
 
         document.add(title);
 
