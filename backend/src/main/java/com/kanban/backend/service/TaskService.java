@@ -42,6 +42,11 @@ public class TaskService {
         if (newTask.getName() != null) {
             taskToUpdate.setName(newTask.getName());
         }
+
+        if (newTask.getDescription() != null) {
+            taskToUpdate.setDescription(newTask.getDescription());
+        }
+
         return taskRepository.save(taskToUpdate);
     }
 }
