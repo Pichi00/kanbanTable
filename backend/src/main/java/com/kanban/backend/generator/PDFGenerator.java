@@ -20,7 +20,7 @@ public class PDFGenerator {
     private final Color taskGroupColor = new Color(213, 189, 175);
     private final Color taskColor = new Color(245, 235, 224);
 
-    public void generate(Table table, HttpServletResponse response) throws IOException {
+    public Document generate(Table table, HttpServletResponse response) throws IOException {
         Document document = new Document(PageSize.A4.rotate());
         PdfWriter.getInstance(document, response.getOutputStream());
 
@@ -79,5 +79,7 @@ public class PDFGenerator {
 
         document.add(mainTable);
         document.close();
+
+        return document;
     }
 }
