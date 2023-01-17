@@ -49,7 +49,7 @@ class TagServiceTest {
     void shouldGetTagById() {
         //given
         final Long id = 1L;
-        final Tag returnedOutput = new Tag(id, "KW3JqT1T7L9f0", List.of(new Task()), new Table());
+        final Tag returnedOutput = new Tag(id, "KW3JqT1T7L9f0", "#fefefe", List.of(new Task()), new Table());
         given(this.tagRepository.findById(id)).willReturn(Optional.of(returnedOutput));
 
         //when
@@ -63,7 +63,7 @@ class TagServiceTest {
     void shouldThrowNotFoundException() {
         //given
         final Long id = 8L;
-        final Tag tag = new Tag(id, "iz16I", Collections.emptyList(), new Table());
+        final Tag tag = new Tag(id, "iz16I", "#fefefe", Collections.emptyList(), new Table());
         String expectedMessage = "Could not find Tag with id " + id.toString();
         given(this.tagRepository.findById(id)).willThrow(new ResourceNotFoundException(Tag.class.getSimpleName(), id));
 
@@ -85,7 +85,7 @@ class TagServiceTest {
     void shouldAddTag() {
         //given
         final List<Task> tasks = List.of(new Task());
-        final Tag givenInput = new Tag("XkRUHwn7", tasks, new Table());
+        final Tag givenInput = new Tag("XkRUHwn7", "#fefefe", tasks, new Table());
 
         //when
         this.subject.addTag(givenInput);
@@ -102,7 +102,7 @@ class TagServiceTest {
     void shouldDeleteTagById() {
         //given
         final Long id = 1L;
-        final Tag tagToDelete = new Tag(id, "q556cIWu1", Collections.emptyList(), new Table());
+        final Tag tagToDelete = new Tag(id, "q556cIWu1", "#fefefe", Collections.emptyList(), new Table());
         given(tagRepository.findById(id)).willReturn(Optional.of(tagToDelete));
 
         //when
