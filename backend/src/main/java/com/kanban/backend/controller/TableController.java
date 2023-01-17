@@ -15,6 +15,7 @@ import com.kanban.backend.service.UserTableRoleService;
 import com.lowagie.text.Document;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -57,7 +58,7 @@ public class TableController {
         PDFGenerator pdfGenerator = new PDFGenerator();
         Document document = pdfGenerator.generate(table, response);
 
-        return ResponseEntity.ok().body(document);
+        return ResponseEntity.ok().contentType(MediaType.APPLICATION_PDF).body(document);
     }
 
     @GetMapping("/tables")

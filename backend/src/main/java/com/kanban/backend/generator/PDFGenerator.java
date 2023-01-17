@@ -7,7 +7,6 @@ import com.lowagie.text.*;
 import com.lowagie.text.Font;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
-import com.lowagie.text.pdf.PdfTable;
 import com.lowagie.text.pdf.PdfWriter;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -21,7 +20,7 @@ public class PDFGenerator {
     private final Color taskColor = new Color(245, 235, 224);
 
     public Document generate(Table table, HttpServletResponse response) throws IOException {
-        Document document = new Document(PageSize.A4.rotate());
+        Document document = new Document(PageSize.A4);
         PdfWriter.getInstance(document, response.getOutputStream());
 
         document.open();
@@ -38,16 +37,8 @@ public class PDFGenerator {
 
         List<TaskGroup> taskGroups = table.getTaskGroups();
 
-        PdfPTable mainTable = new PdfPTable(taskGroups.size());
-        mainTable.setWidthPercentage(100.0f);
-
         for (TaskGroup taskGroup: taskGroups) {
-            PdfPCell tableCell = new PdfPCell();
-            tableCell.setBorder(PdfPCell.NO_BORDER);
-
             PdfPTable pdfPTable = new PdfPTable(1);
-            pdfPTable.setSpacingAfter(0);
-            pdfPTable.setSpacingBefore(0);
             PdfPCell taskGroupCell = new PdfPCell();
             taskGroupCell.setBackgroundColor(this.taskGroupColor);
 
@@ -73,11 +64,12 @@ public class PDFGenerator {
                 pdfPTable.addCell(taskCell);
             }
 
-            tableCell.addElement(pdfPTable);
-            mainTable.addCell(tableCell);
+            pdfPTable.setSpacingAfter(20.0f);
+
+            document.add(pdfPTable);
+
         }
 
-        document.add(mainTable);
         document.close();
 
         return document;
