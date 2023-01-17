@@ -86,7 +86,7 @@ class TagControllerTest {
     @WithMockUser
     void shouldAddTag() throws Exception {
         //given
-        final Tag tag = new Tag("AL5KZm8ezRA6", Collections.emptyList(), new Table());
+        final Tag tag = new Tag("AL5KZm8ezRA6", "#fefefe", Collections.emptyList(), new Table());
 
         //when
         when(this.tagService.addTag(tag)).thenReturn(tag);
@@ -102,7 +102,7 @@ class TagControllerTest {
     void shouldDeleteTagById() throws Exception {
         //given
         final Long id = 28L;
-        final Tag tag = new Tag(id, "4j2Po", Collections.emptyList(), new Table());
+        final Tag tag = new Tag(id, "4j2Po", "#fefefe", Collections.emptyList(), new Table());
 
         //when
         when(this.tagService.deleteTagById(id)).thenReturn(tag);
@@ -118,7 +118,7 @@ class TagControllerTest {
     void shouldUpdateTag() throws Exception {
         //given
         final Long id = 6L;
-        final Tag tag = new Tag(id, "NLvQ27cg1UpmxV", Collections.emptyList(), new Table());
+        final Tag tag = new Tag(id, "NLvQ27cg1UpmxV", "#fefefe", Collections.emptyList(), new Table());
 
         //when
         when(this.tagService.updateTag(id, tag)).thenReturn(tag);
