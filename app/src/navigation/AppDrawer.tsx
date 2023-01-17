@@ -1,10 +1,12 @@
 import { createDrawerNavigator } from "@react-navigation/drawer";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { AppBar } from "../components/AppBar";
 import { TableScreen } from "../features/table";
 import { TableListScreen } from "../features/tables_list";
+import { TableSettingsScreen } from "../features/table_settings_screen";
 import { AppRoutes } from "./types";
 
-const DrawerNavigator = createDrawerNavigator();
+const DrawerNavigator = createNativeStackNavigator();
 
 export const AppDrawerNavigator = () => {
   return (
@@ -12,7 +14,7 @@ export const AppDrawerNavigator = () => {
       // drawerContent={(props) => <></>}
       screenOptions={{
         header: (props) => <AppBar {...props} />,
-        drawerType: "slide",
+        // drawerType: "slide",
       }}
     >
       <DrawerNavigator.Screen
@@ -20,6 +22,10 @@ export const AppDrawerNavigator = () => {
         component={TableListScreen}
       />
       <DrawerNavigator.Screen name={AppRoutes.Table} component={TableScreen} />
+      <DrawerNavigator.Screen
+        name={AppRoutes.TableSettingsScreen}
+        component={TableSettingsScreen}
+      />
     </DrawerNavigator.Navigator>
   );
 };
