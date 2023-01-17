@@ -1,7 +1,7 @@
 import jwt_decode from "jwt-decode";
 
 export type JwtDecoded = {
-  id: string;
+  id: number;
   email: string;
   name: string;
   sub: string;
@@ -10,7 +10,7 @@ export type JwtDecoded = {
 };
 
 export type JwtUser = {
-  id: string;
+  id: number;
   email: string;
   name: string;
   expiringAt: number;
@@ -18,8 +18,6 @@ export type JwtUser = {
 
 export const decodeUser = (token: string): JwtUser => {
   const decoded = jwt_decode(token) satisfies JwtDecoded;
-
-  console.log(decoded);
 
   const { id, sub, name, exp } = decoded;
 

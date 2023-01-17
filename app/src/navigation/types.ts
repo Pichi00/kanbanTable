@@ -10,6 +10,7 @@ export const RootStackRoutes = {
 export const AppRoutes = {
   Table: "Table",
   TableList: "TableList",
+  TableSettingsScreen: "TableSettingsScreen",
 } as const;
 
 export type RootStackParamList = {
@@ -24,4 +25,7 @@ export type AppParamList = {
     tableId: number;
   };
   [AppRoutes.TableList]: undefined;
+  [AppRoutes.TableSettingsScreen]: {
+    tableId: number;
+  };
 };

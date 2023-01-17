@@ -6,6 +6,7 @@ import {
   Platform,
   TextInput,
   ActivityIndicator,
+  Pressable,
 } from "react-native";
 import { ScreenContainer } from "../../../components";
 import { AppParamList, AppRoutes } from "../../../navigation/types";
@@ -115,11 +116,36 @@ export const TableScreen = ({ navigation, route }: Props) => {
             onEndEditing={(e) => handleChangeName(e.nativeEvent.text)}
             editable={!updateTableNameMutation.isLoading}
           />
-          <MaterialCommunityIcons
-            name="dots-vertical"
-            size={24}
-            color="black"
-          />
+          <View
+            style={{
+              flexDirection: "row",
+            }}
+          >
+            <MaterialCommunityIcons
+              name="file-export-outline"
+              size={24}
+              color={theme.colors.text}
+              style={{
+                marginRight: theme.spacing.$4,
+              }}
+              onPress={async () => {
+                await AppAPI.app.downloadPdf(tableId);
+              }}
+            />
+            <Pressable
+              onPress={() => {
+                navigation.navigate(AppRoutes.TableSettingsScreen, {
+                  tableId,
+                });
+              }}
+            >
+              <MaterialCommunityIcons
+                name="cog"
+                size={24}
+                color={theme.colors.text}
+              />
+            </Pressable>
+          </View>
         </View>
       </View>
       <ScrollView

@@ -1,5 +1,17 @@
+import { string } from "zod";
 import { apiClient } from "./axios";
-import { TableType, TaskType, TaskGroupType } from "./types";
+import {
+  TableType,
+  TaskType,
+  TaskGroupType,
+  Tag,
+  User,
+  TableRole,
+} from "./types";
+import * as FileSystem from "expo-file-system";
+import * as Linking from "expo-linking";
+import * as SecureStore from "expo-secure-store";
+import * as Sharing from "expo-sharing";
 
 export const getTables = async () => {
   const response = await apiClient.get<TableType[]>("/tables");
@@ -22,6 +34,12 @@ export const createTable = async () => {
   return response.data;
 };
 
+export const deleteTable = async (id: number) => {
+  const response = await apiClient.delete<TableType>(`/tables/${id}`);
+
+  return response.data;
+};
+
 /**
  * Updated table name
  * @param id table id
@@ -29,7 +47,6 @@ export const createTable = async () => {
  * @returns the updated table
  */
 export const updateTableName = async (id: number, name: string) => {
-  console.log(name);
   const response = await apiClient.put<TableType>(`/tables/${id}`, {
     name,
   });
@@ -67,12 +84,118 @@ export const updateTaskGroupName = async (id: number, name: string) => {
   return response.data;
 };
 
+export const deleteTaskGroup = async (id: number) => {
+  const response = await apiClient.delete<TaskGroupType>(`/taskgroups/${id}`);
+
+  return response.data;
+};
+
 export const createTask = async (taskGroupId: number) => {
   const response = await apiClient.post<TaskType>(
     `/tasks?taskGroup=${taskGroupId}`,
     {
       name: "New Task",
     },
+  );
+
+  return response.data;
+};
+
+export const getTask = async (id: number) => {
+  const response = await apiClient.get<TaskType>(`/tasks/${id}`);
+
+  return response.data;
+};
+
+export const updateTask = async ({
+  id,
+  name,
+  description,
+}: Partial<TaskType>) => {
+  const response = await apiClient.put<TaskType>(`/tasks/${id}`, {
+    name,
+    description,
+  });
+
+  return response.data;
+};
+
+export const deleteTask = async (id: number) => {
+  const response = await apiClient.delete<TaskType>(`/tasks/${id}`);
+
+  return response.data;
+};
+
+export const updateTaskTaskGroup = async (id: number, taskGroupId: number) => {
+  const response = await apiClient.put<TaskType>(
+    `/tasks/${id}/taskgroups/${taskGroupId}`,
+  );
+
+  return response.data;
+};
+
+export const createTag = async ({
+  tableId,
+  ...data
+}: {
+  name: string;
+  color: string;
+  tableId: number;
+}) => {
+  const response = await apiClient.post<Tag>(`/tags?table=${tableId}`, data);
+
+  return response.data;
+};
+
+export const downloadPdf = async (tableId: number) => {
+  try {
+    const { uri, mimeType, headers } = await FileSystem.downloadAsync(
+      `http://104.248.45.230:8080/pdf/${tableId}`,
+      FileSystem.documentDirectory + `table_${tableId}.pdf`,
+      {
+        headers: {
+          "Content-Type": "application/pdf",
+          Authorization: `Bearer ${await SecureStore.getItemAsync("token")}`,
+        },
+      },
+    );
+
+    await Sharing.shareAsync(uri, {});
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+/**
+ * Gets all users
+ */
+export const getUsers = async () => {
+  const response = await apiClient.get<User[]>("/users");
+
+  return response.data;
+};
+
+/**
+ * Gets a user by id
+ * @param id user id
+ */
+export const getUser = async (id: number) => {
+  const response = await apiClient.get<User>(`/users/${id}`);
+
+  return response.data;
+};
+
+export const addUserToTable = async ({
+  tableId,
+  userId,
+  role = "USER",
+}: {
+  tableId: number;
+  userId: number;
+  role: TableRole;
+}) => {
+  const response = await apiClient.put<TableType>(
+    `/tables/${tableId}/users/${userId}/roles/${role}`,
   );
 
   return response.data;

@@ -1,5 +1,5 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
-import { TableType } from "../../../api/app";
+import { TableType } from "../../../api/types";
 import { useTheme } from "../../../theme";
 
 type Props = {
@@ -40,7 +40,7 @@ export const TableListItem = ({ table, onPress }: Props) => {
         >
           {name}
         </Text>
-        <Text>24 tasks / 21 active</Text>
+        <Text>{table.taskGroups.length} task group(s)</Text>
       </View>
     </Pressable>
   );

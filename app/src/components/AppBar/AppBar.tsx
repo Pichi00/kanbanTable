@@ -4,8 +4,9 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useTheme } from "../../theme";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useAuth } from "../../hooks/useAuth";
+import { NativeStackHeaderProps } from "@react-navigation/native-stack";
 
-export const AppBar = ({ navigation, layout }: DrawerHeaderProps) => {
+export const AppBar = ({ navigation }: NativeStackHeaderProps) => {
   const { logout } = useAuth();
   const insets = useSafeAreaInsets();
   const { theme } = useTheme();
@@ -23,12 +24,6 @@ export const AppBar = ({ navigation, layout }: DrawerHeaderProps) => {
         paddingTop: insets.top,
       }}
     >
-      <TouchableOpacity
-        activeOpacity={0.7}
-        onPress={() => navigation.openDrawer()}
-      >
-        <MaterialCommunityIcons name="menu" size={24} color="black" />
-      </TouchableOpacity>
       <Text
         style={{
           color: theme.colors.text,
