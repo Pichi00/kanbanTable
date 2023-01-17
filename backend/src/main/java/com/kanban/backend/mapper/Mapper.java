@@ -11,15 +11,15 @@ import java.util.List;
 @Component
 public class Mapper {
     public UserDTO toUserDTO(User user) {
-        List<Long> userTableRolesId = Collections.emptyList();
+        List<UserTableRoleDTO> userTableRoles = Collections.emptyList();
         if (user.getUserTableRoles().size() > 0) {
-            userTableRolesId = user.getUserTableRoles()
+            userTableRoles = user.getUserTableRoles()
                     .stream()
-                    .map(UserTableRole::getId)
+                    .map(this::toUserTableRoleDTO)
                     .toList();
         }
 
-        return new UserDTO(user.getName(), user.getEmail(), userTableRolesId);
+        return new UserDTO(user.getId(), user.getName(), user.getEmail(), userTableRoles);
     }
 
     public User toUser(UserCreatorDTO userCreatorDTO) {
