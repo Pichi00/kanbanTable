@@ -12,6 +12,7 @@ import com.kanban.backend.model.UserTableRole;
 import com.kanban.backend.service.TableService;
 import com.kanban.backend.service.UserService;
 import com.kanban.backend.service.UserTableRoleService;
+import com.lowagie.text.Document;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -36,7 +37,7 @@ public class TableController {
     private final Mapper mapper;
 
     @GetMapping("/pdf/{id}")
-    public void generatePDF(@PathVariable Long id, HttpServletResponse response) throws IOException {
+    public ResponseEntity<Document> generatePDF(@PathVariable Long id, HttpServletResponse response) throws IOException {
         response.setContentType("application/pdf");
 
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd:HH:mm:ss");
@@ -54,7 +55,9 @@ public class TableController {
         }
 
         PDFGenerator pdfGenerator = new PDFGenerator();
-        pdfGenerator.generate(table, response);
+        Document document = pdfGenerator.generate(table, response);
+
+        return ResponseEntity.ok().body(document);
     }
 
     @GetMapping("/tables")
