@@ -73,9 +73,6 @@ public class TaskController {
         User currentUser = this.userService.getUserById(userId);
         task.setCreatorUsername(currentUser.getName());
 
-        log.info(task.getName());
-        log.info(task.getCreatorUsername());
-
         Task responseBody = taskService.addTask(task);
         return ResponseEntity.ok(responseBody);
     }
@@ -99,7 +96,10 @@ public class TaskController {
         Task task = taskService.getTaskById(taskId);
         Tag tag = tagService.getTagById(tagId);
 
-        task.addTag(tag);
+        if (!task.getTags().contains(tag)) {
+            task.addTag(tag);
+        }
+
         Task responseBody = taskService.addTask(task);
         return ResponseEntity.ok(responseBody);
     }
