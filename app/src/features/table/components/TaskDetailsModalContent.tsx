@@ -1,9 +1,14 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Text, View, TextInput } from "react-native";
+import { Text, View, TextInput, FlatList, Pressable } from "react-native";
 import { AppAPI } from "../../../api";
 import { useTheme } from "../../../theme";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
-import { SelectList } from "react-native-dropdown-select-list";
+import {
+  MultipleSelectList,
+  SelectList,
+} from "react-native-dropdown-select-list";
+import { useEffect, useState } from "react";
+import { Tag } from "../../../components/Tag";
 
 type Props = {
   taskId: number;
@@ -18,6 +23,7 @@ export const TaskDetailsModalContent = ({
   taskGroupId,
   onDeleted,
 }: Props) => {
+  const [tags, setTags] = useState<number[]>([]);
   const queryClient = useQueryClient();
   const { theme } = useTheme();
 
@@ -68,6 +74,14 @@ export const TaskDetailsModalContent = ({
     },
   });
 
+  const updateTaskTagsMutation = useMutation({
+    mutationFn: (tagId: number) => AppAPI.app.addTagsToTask({ tagId, taskId }),
+    onSuccess: () => {
+      queryClient.invalidateQueries(["task", taskId]);
+      queryClient.invalidateQueries(["taskgroup", taskGroupId]);
+    },
+  });
+
   if (taskQuery.isLoading) {
     return null;
   }
@@ -78,6 +92,8 @@ export const TaskDetailsModalContent = ({
     value: taskGroup.name,
     disabled: taskGroup.id === taskGroupId,
   }));
+
+  console.log(taskQuery.data);
 
   return (
     <View>
@@ -142,6 +158,33 @@ export const TaskDetailsModalContent = ({
           (taskGroup) => taskGroup.key === taskGroupId,
         )}
       />
+
+      {tableQuery.data?.tags.length > 0 && (
+        <FlatList
+          horizontal
+          style={{
+            marginTop: theme.spacing.$4,
+          }}
+          data={tableQuery.data.tags}
+          showsHorizontalScrollIndicator={false}
+          renderItem={({ item }) => (
+            <Pressable
+              style={{
+                marginRight: theme.spacing.$3,
+              }}
+              onPress={() => {
+                updateTaskTagsMutation.mutate(item.id);
+              }}
+            >
+              <Tag
+                tag={item}
+                fill={taskQuery.data?.tags.some((tag) => tag.id === item.id)}
+              ></Tag>
+            </Pressable>
+          )}
+          keyExtractor={(item) => item.id.toString()}
+        />
+      )}
 
       <TextInput
         style={{

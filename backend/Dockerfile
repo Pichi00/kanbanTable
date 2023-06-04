@@ -1,8 +1,8 @@
-FROM openjdk:19-jdk-alpine
+FROM eclipse-temurin:19-jdk
 
-RUN apk upgrade --update-cache --available && \
-  apk add openssl && \
-  rm -rf /var/cache/apk/*
+# RUN apk upgrade --update-cache --available && \
+#   apk add openssl && \
+#   rm -rf /var/cache/apk/*
 
 WORKDIR /app
 
