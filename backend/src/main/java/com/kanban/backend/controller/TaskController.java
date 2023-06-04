@@ -98,6 +98,8 @@ public class TaskController {
 
         if (!task.getTags().contains(tag)) {
             task.addTag(tag);
+        } else {
+            task.removeTag(tag);
         }
 
         Task responseBody = taskService.addTask(task);
