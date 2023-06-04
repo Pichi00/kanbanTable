@@ -3,6 +3,7 @@ import { View, Text, Pressable } from "react-native";
 import { TaskType } from "../../../api/types";
 import { useAuth } from "../../../hooks/useAuth";
 import { useTheme } from "../../../theme";
+import invert from "invert-color";
 
 type Props = {
   task: TaskType;
@@ -12,6 +13,8 @@ type Props = {
 export const Task = ({ task, onPress }: Props) => {
   const { user } = useAuth();
   const { theme } = useTheme();
+
+  console.log(task);
 
   return (
     <Pressable onPress={() => onPress(task.id)}>
@@ -46,15 +49,33 @@ export const Task = ({ task, onPress }: Props) => {
             @{task.creatorUsername}
           </Text>
         </Text>
-        <View
-          style={{
-            marginTop: theme.spacing.$5,
-            width: 60,
-            height: 8,
-            borderRadius: theme.radii.$4,
-            backgroundColor: "#5FCA6A",
-          }}
-        ></View>
+        {task.tags?.length > 0 && (
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              flexWrap: "wrap",
+              marginTop: theme.spacing.$5,
+            }}
+          >
+            {task.tags.map((tag, index) => (
+              <View
+                key={tag.id}
+                style={{
+                  marginTop: theme.spacing.$3,
+                  // width: 60,
+                  // height: 8,
+                  paddingHorizontal: theme.spacing.$4,
+                  paddingVertical: theme.spacing.$2,
+                  borderRadius: theme.radii.$4,
+                  backgroundColor: tag.color,
+                  marginRight:
+                    index === task.tags.length - 1 ? 0 : theme.spacing.$3,
+                }}
+              ></View>
+            ))}
+          </View>
+        )}
       </View>
     </Pressable>
   );

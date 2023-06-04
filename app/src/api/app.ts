@@ -1,5 +1,5 @@
 import { string } from "zod";
-import { apiClient } from "./axios";
+import { BASE_URL, apiClient } from "./axios";
 import {
   TableType,
   TaskType,
@@ -150,7 +150,7 @@ export const createTag = async ({
 export const downloadPdf = async (tableId: number) => {
   try {
     const { uri, mimeType, headers } = await FileSystem.downloadAsync(
-      `http://104.248.45.230:8080/pdf/${tableId}`,
+      `${BASE_URL}/pdf/${tableId}`,
       FileSystem.documentDirectory + `table_${tableId}.pdf`,
       {
         headers: {
@@ -196,6 +196,21 @@ export const addUserToTable = async ({
 }) => {
   const response = await apiClient.put<TableType>(
     `/tables/${tableId}/users/${userId}/roles/${role}`,
+  );
+
+  return response.data;
+};
+
+export const addTagsToTask = async ({
+  tagId,
+  taskId,
+}: {
+  tagId: number;
+  taskId: number;
+}) => {
+  console.log(tagId, taskId);
+  const response = await apiClient.put<TaskType>(
+    `/tasks/${taskId}/tags/${tagId}`,
   );
 
   return response.data;

@@ -33,14 +33,11 @@ export const AppBar = ({ navigation }: NativeStackHeaderProps) => {
       >
         Dzbanban
       </Text>
-      <Pressable
-        style={{
-          width: 24,
-          height: 24,
-          backgroundColor: theme.colors.surface,
-          borderRadius: 12,
-        }}
+      <MaterialCommunityIcons
         onPress={logout}
+        name="logout"
+        color={theme.colors.text}
+        size={24}
       />
     </View>
   );
